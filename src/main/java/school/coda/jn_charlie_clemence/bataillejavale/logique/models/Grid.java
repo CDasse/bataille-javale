@@ -5,14 +5,18 @@ import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orie
 
 public class Grid {
     private final Cell[][] cells;
+    private final int width;
+    private final int height;
 
-    public Grid(int width, int height) {
-        this.cells = new Cell[width][height];
-        for (int row = 0; row < width; row++) {
-            for (int column = 0; column < height; column++) {
+    public Grid(int height, int width) {
+        this.cells = new Cell[height][width];
+        for (int row = 0; row < height; row++){
+            for (int column = 0; column < width; column++){
                 cells[row][column] = new Cell();
             }
         }
+        this.width = width;
+        this.height = height;
     }
 
     public boolean placeShip(Ship ship, int x, int y, Orientation orientation) {
@@ -49,5 +53,13 @@ public class Grid {
             return false;
         }
         return cells[x][y].receiveShot();
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 }
