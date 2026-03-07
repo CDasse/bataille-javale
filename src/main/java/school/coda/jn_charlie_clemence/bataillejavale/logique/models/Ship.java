@@ -11,6 +11,10 @@ public class Ship {
         this.hp = this.size;
     }
 
+    public int getSize(){
+        return this.size;
+    }
+
     public int takeHit(){
         if (this.hp > 0) {
             this.hp -= 1;
