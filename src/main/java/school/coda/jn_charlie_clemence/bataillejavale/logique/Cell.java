@@ -26,4 +26,8 @@ public class Cell {
         }
         return false;
     }
+
+    public boolean isEmpty(){
+        return this.ship == null;
+    }
 }
