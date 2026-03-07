@@ -18,7 +18,7 @@ public class Grid {
         }
     }
 
-    public boolean shoot (int x, int y){
+    public boolean shoot(int x, int y){
         if (x < 0 || x >= cells.length || y < 0 || y >= cells[0].length) {
             return false;
         }

@@ -1,6 +1,5 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique;
 
-import com.almasb.fxgl.core.collection.grid.Grid;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 
 import java.util.List;
@@ -11,18 +10,18 @@ public class Player {
     private final Grid grid;
     private final List<Ship> ships;
 
-    public Player() {
-        this("AI", true);
+    public Player( int widthGrid, int heightGrid) {
+        this("AI", true, widthGrid, heightGrid);
     }
 
-    public Player(String name) {
-        this(name, false);
+    public Player(String name, int widthGrid, int heightGrid) {
+        this(name, false, widthGrid, heightGrid);
     }
 
-    private Player(String name, boolean isAI) {
+    private Player(String name, boolean isAI, int widthGrid, int heightGrid) {
         this.name = name;
         this.isAI = isAI;
-        this.grid = new Grid();
+        this.grid = new Grid(widthGrid, heightGrid);
         this.ships = ShipFactory.createFleet();
     }
 
