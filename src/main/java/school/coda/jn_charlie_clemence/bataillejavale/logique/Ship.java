@@ -22,5 +22,5 @@ public class Ship {
         return this.hp == 0;
     }
 
-
 }
+
