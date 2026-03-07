@@ -2,56 +2,64 @@ package school.coda.jn_charlie_clemence.bataillejavale;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
+
 
 public class HelloController {
+
+    @FXML
+    private Slider widthSlider;
+
+    @FXML
+    private Slider heightSlider;
 
     @FXML
     private Label welcomeText;
 
     @FXML
-    private GridPane monGridPane;
+    private GridPane myGridPane;
 
     @FXML
-    public void initialize() {
-        genererGrille();
+    protected void initializeGridView() {
+        int height = (int) heightSlider.getValue();
+        int width = (int) widthSlider.getValue();
+
+        Grid grid = new Grid(height, width);
+        initializeGrid(grid, myGridPane);
+        welcomeText.setText("New grid generated !");
     }
 
-    private void genererGrille() {
-        int taille = 20;
 
-        for (int row = 0; row < taille; row++) {
-            for (int col = 0; col < taille; col++) {
+    private void initializeGrid(Grid grid, GridPane gridPane) {
+        gridPane.getChildren().clear();
+
+        int rows = grid.getWidth();
+        int cols = grid.getHeight();
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
 
                 Rectangle cell = new Rectangle(20, 20); // Taille de 20px
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
-                // Variables pour la lambda
                 final int r = row;
                 final int c = col;
 
-                // Action au clic
                 cell.setOnMouseClicked(_ -> {
-
                     char lettre = (char) ('A' + c);
                     System.out.println(r + ":" + lettre);
 
-                    // Change la couleur pour marquer le clic
                     cell.setFill(Color.DARKBLUE);
                 });
 
-                // Placement dans le GridPane (colonne, ligne)
-                monGridPane.add(cell, col, row);
+                gridPane.add(cell, col, row);
             }
         }
     }
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Grille générée !");
-        genererGrille();
-    }
 }

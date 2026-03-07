@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
 
+<?import javafx.scene.control.Slider?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="school.coda.jn_charlie_clemence.bataillejavale.HelloController">
     <padding>
@@ -14,7 +15,29 @@
 
     <Label fx:id="welcomeText"/>
 
-    <GridPane fx:id="monGridPane" alignment="CENTER" hgap="1" vgap="1" />
+    <GridPane fx:id="myGridPane" alignment="CENTER" hgap="1" vgap="1" />
 
-    <Button text="Generate new grid" onAction="#onHelloButtonClick"/>
+    <Button text="Generate new grid" onAction="#initializeGridView"/>
+
+    <Label>Width of grid :</Label>
+    <Slider fx:id="widthSlider"
+            min="8"
+            max="15"
+            value="10"
+            showTickLabels="true"
+            showTickMarks="true"
+            majorTickUnit="1"
+            minorTickCount="0"
+            snapToTicks="true" />
+
+    <Label>Height of grid :</Label>
+    <Slider fx:id="heightSlider"
+            min="8"
+            max="15"
+            value="10"
+            showTickLabels="true"
+            showTickMarks="true"
+            majorTickUnit="1"
+            minorTickCount="0"
+            snapToTicks="true" />
 </VBox>
