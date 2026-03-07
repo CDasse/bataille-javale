@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.logique;
+package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
 public class Cell {
     private Ship ship;

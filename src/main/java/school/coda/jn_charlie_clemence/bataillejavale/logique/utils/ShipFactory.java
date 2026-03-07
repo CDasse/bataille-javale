@@ -1,6 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.utils;
 
-import school.coda.jn_charlie_clemence.bataillejavale.logique.Ship;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
