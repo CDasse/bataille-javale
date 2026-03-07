@@ -33,4 +33,8 @@ public class Player {
         }
         return true;
     }
+
+    public Grid getGrid() {
+        return this.grid;
+    }
 }

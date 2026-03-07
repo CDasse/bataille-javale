@@ -30,4 +30,11 @@ public class Cell {
     public boolean isEmpty(){
         return this.ship == null;
     }
+
+    public boolean isShipAlive(){
+        if (this.ship == null) {
+            return false;
+        }
+        return !this.ship.isSunk();
+    }
 }
