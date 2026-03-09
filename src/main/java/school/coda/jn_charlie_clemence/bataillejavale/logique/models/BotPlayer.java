@@ -1,6 +1,7 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class BotPlayer extends Player {
 
@@ -10,8 +11,8 @@ public class BotPlayer extends Player {
 
     @Override
     public int[] getNextMove() {
-        Random rand = new Random();
-
+        RandomGenerator rand = new Random();
+//RandomGenerator r = () -> 0;
         int maxX = this.getGrid().getWidth();
         int maxY = this.getGrid().getHeight();
 
