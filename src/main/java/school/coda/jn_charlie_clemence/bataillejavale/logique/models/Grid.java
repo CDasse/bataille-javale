@@ -77,4 +77,31 @@ public class Grid {
     public int getHeight() {
         return this.height;
     }
+
+    public void display (boolean isRadar) {
+        //Affichage des nombres en haut
+        IO.print("   ");
+        for (int i = 0; i < width; i++){
+            IO.print(i + " ");
+        }
+        IO.println("");
+
+        for (int row = 0; row < height; row++) {
+            //Affichage des lettres à gauche
+            char letter = (char) ('A' + row);
+            IO.print(letter + "  ");
+            for (int column = 0; column < width; column++) {
+                Cell cell = cells[row][column];
+                //Affichage de la grille
+                String symbol = "~ ";
+                if (cell.isTargeted()) {
+                    symbol = cell.isEmpty() ? "O" : "X";
+                } else if (!isRadar && !cell.isEmpty()) {
+                    symbol = "S";
+                }
+                IO.print(symbol);
+            }
+            IO.println("");
+        }
+    }
 }
