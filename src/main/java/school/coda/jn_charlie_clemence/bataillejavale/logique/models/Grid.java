@@ -31,17 +31,17 @@ public class Grid {
         return false;
     }
 
-    public boolean canPLaceShip(Ship ship, int x, int y, Orientation orientation) {
+    public boolean canPLaceShip(Ship ship, int width, int height, Orientation orientation) {
         for (int i = 0; i < ship.getSize(); i++) {
-            int currentX = x;
-            int currentY = y;
+            int currentWidth = width;
+            int currentHeight = height;
             if (orientation == HORIZONTAL) {
-                currentX = x + i;
+                currentHeight = height + i;
             } else {
-                currentY = y + i;
+                currentWidth = width + i;
             }
 
-            if (currentX < 0 || currentX >= cells.length || currentY < 0 || currentY >= cells[0].length || !(cells[currentX][currentY].isEmpty())) {
+            if (currentWidth < 0 || currentWidth >= cells.length || currentHeight < 0 || currentHeight >= cells[0].length || !(cells[currentWidth][currentHeight].isEmpty())) {
                 return false;
             }
         }

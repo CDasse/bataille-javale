@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="school.coda.jn_charlie_clemence.bataillejavale.AccueilController">
+    <VBox  alignment="CENTER" spacing="20.0">
+        <Button onAction="#playButton" text="NOUVELLE PARTIE !" />
+    </VBox>
+
+    <Label text="Test" StackPane.alignment="BOTTOM_RIGHT"/>
+    <StackPane.margin>
+        <Insets bottom="20.0" right="20.0" />
+    </StackPane.margin>
+</StackPane>
