@@ -7,6 +7,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 
 
 public class HelloController {
@@ -33,12 +35,16 @@ public class HelloController {
         welcomeText.setText("New grid generated !");
     }
 
+    @FXML
+    private Rectangle[][] casesGraphiques;
 
     private void initializeGrid(Grid grid, GridPane gridPane) {
         gridPane.getChildren().clear();
 
         int rows = grid.getWidth();
         int cols = grid.getHeight();
+
+        casesGraphiques = new Rectangle[rows][cols];
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -47,12 +53,35 @@ public class HelloController {
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
+                casesGraphiques[row][col] = cell;
+
                 final int r = row;
                 final int c = col;
 
+
+                Ship ship = new Ship("porte-avions", 3);
+
+                cell.setOnMouseEntered(_ -> {
+                    for (int i = 0; i < 3; i++) {
+                        Rectangle voisin = getCellFromGrid(r, c + i);
+                        if (grid.canPLaceShip(ship, r, c, Orientation.HORIZONTAL)) {
+                            if (voisin != null) voisin.setFill(Color.LIGHTGREEN);
+                        } else {
+                            if (voisin != null) voisin.setFill(Color.LIGHTCORAL);
+                        }
+                    }
+                });
+
+                cell.setOnMouseExited(_ -> {
+                    for (int i = 0; i < 3; i++) {
+                        Rectangle voisin = getCellFromGrid(r, c + i);
+                        if (voisin != null) voisin.setFill(Color.LIGHTBLUE);
+                    }
+                });
+
                 cell.setOnMouseClicked(_ -> {
-                    char lettre = (char) ('A' + c);
-                    System.out.println(r + ":" + lettre);
+//                    char lettre = (char) ('A' + c);
+                    System.out.println(r + ":" + c);
 
                     cell.setFill(Color.DARKBLUE);
                 });
@@ -60,6 +89,14 @@ public class HelloController {
                 gridPane.add(cell, col, row);
             }
         }
+    }
+
+    private Rectangle getCellFromGrid(int r, int c) {
+        // On vérifie si les coordonnées r et c sont bien dans les limites du tableau
+        if (casesGraphiques != null && r >= 0 && r < casesGraphiques.length && c >= 0 && c < casesGraphiques[0].length) {
+            return casesGraphiques[r][c];
+        }
+        return null;
     }
 
 }
