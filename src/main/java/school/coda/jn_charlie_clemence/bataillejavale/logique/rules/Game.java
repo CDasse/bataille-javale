@@ -1,5 +1,7 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.rules;
 
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.BotPlayer;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.HumanPlayer;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Player;
 
 public class Game {
@@ -15,7 +17,11 @@ public class Game {
         this.isGameEnded = false;
     }
 
-    public void nextTurn(int x, int y) {
+    public boolean isGameOver() {
+        return (player.getGrid().allShipsSunk()) || (cpu.getGrid().allShipsSunk());
+    }
+
+    private void executeShot(int x, int y) {
         Player opponent;
 
         if (this.isGameEnded) return;
@@ -35,7 +41,19 @@ public class Game {
         }
     }
 
-    public boolean isGameOver () {
-        return (player.getGrid().allShipsSunk()) || (cpu.getGrid().allShipsSunk());
+    public void nextHumanTurn(int x, int y) {
+        if (this.currentPlayer instanceof BotPlayer) return;
+        executeShot(x, y);
+
+        if (this.currentPlayer instanceof BotPlayer && !isGameEnded) {
+            nextCpuTurn();
+        }
     }
+
+    public void nextCpuTurn() {
+        int[] coords = currentPlayer.getNextMove();
+        executeShot(coords[0], coords[1]);
+    }
+
+
 }

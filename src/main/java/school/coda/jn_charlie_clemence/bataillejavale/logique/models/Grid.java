@@ -24,7 +24,7 @@ public class Grid {
             for (int i = 0; i < ship.getSize(); i++) {
                 int currentX = (orientation == HORIZONTAL) ? x + i: x;
                 int currentY = (orientation == VERTICAL) ? y + i: y;
-                cells[currentX][currentY].setShip(ship);
+                cells[currentY][currentX].setShip(ship);
             }
             return true;
         }
@@ -41,7 +41,7 @@ public class Grid {
                 currentY = y + i;
             }
 
-            if (currentX < 0 || currentX >= cells.length || currentY < 0 || currentY >= cells[0].length || !(cells[currentX][currentY].isEmpty())) {
+            if (currentX < 0 || currentX >= cells[0].length || currentY < 0 || currentY >= cells.length || !(cells[currentY][currentX].isEmpty())) {
                 return false;
             }
         }
@@ -49,10 +49,10 @@ public class Grid {
     }
 
     public boolean shoot(int x, int y) {
-        if (x < 0 || x >= cells.length || y < 0 || y >= cells[0].length) {
+        if (x < 0 || x >= cells[0].length || y < 0 || y >= cells.length) {
             return false;
         }
-        return cells[x][y].receiveShot();
+        return cells[y][x].receiveShot();
     }
 
     public boolean allShipsSunk () {
@@ -64,6 +64,10 @@ public class Grid {
             }
         }
         return true;
+    }
+
+    public boolean isCellAlreadyTargeted (int x, int y) {
+        return cells[y][x].isTargeted();
     }
 
     public int getWidth() {

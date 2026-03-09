@@ -31,6 +31,10 @@ public class Cell {
         return this.ship == null;
     }
 
+    public boolean isTargeted() {
+        return this.isTargeted;
+    }
+
     public boolean isShipAlive(){
         if (this.ship == null) {
             return false;
