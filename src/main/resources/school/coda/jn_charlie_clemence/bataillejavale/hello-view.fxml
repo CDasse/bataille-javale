@@ -15,9 +15,15 @@
 
     <Label fx:id="welcomeText"/>
 
-    <GridPane fx:id="myGridPane" alignment="CENTER" hgap="1" vgap="1"/>
+    <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
 
     <Button text="Generate new grid" onAction="#initializeGridView"/>
+
+    <Button text="5 cases" onAction="#addPorteAvions"/>
+    <Button text="4 cases" onAction="#addCuirasse"/>
+    <Button text="3 cases" onAction="#addDestroyer"/>
+<!--    <Button text="3 cases" onAction="#addSousMarin"/>-->
+<!--    <Button text="2 cases" onAction="#addPatrouilleur"/>-->
 
     <Label>Width of grid :</Label>
     <Slider fx:id="widthSlider"

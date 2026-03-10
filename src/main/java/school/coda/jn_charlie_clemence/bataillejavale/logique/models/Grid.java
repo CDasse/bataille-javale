@@ -22,8 +22,8 @@ public class Grid {
     public boolean placeShip(Ship ship, int x, int y, Orientation orientation) {
         if (canPLaceShip(ship, x, y, orientation)) {
             for (int i = 0; i < ship.getSize(); i++) {
-                int currentX = (orientation == HORIZONTAL) ? x + i: x;
-                int currentY = (orientation == VERTICAL) ? y + i: y;
+                int currentX = (orientation == VERTICAL) ? x + i: x;
+                int currentY = (orientation == HORIZONTAL) ? y + i: y;
                 cells[currentY][currentX].setShip(ship);
             }
             return true;
