@@ -106,7 +106,7 @@ public class HelloController {
                                     IO.println(r + ":" + (c + i));
                                     Rectangle voisins = getCellFromGrid(r, c + i);
                                     if (voisins != null) voisins.setFill(Color.DARKBLUE);
-                                    IO.println(shipToPlace.size);
+//                                    IO.println(5);
                                 }
                             } else {
                                 for (int i = 0; i < 5; i++) {
@@ -129,7 +129,7 @@ public class HelloController {
 
     private void hideVisualisationOnMouseExit(Rectangle cell, int row, int col) {
         cell.setOnMouseExited(_ -> {
-            for (int i = 0; i < shipToPlace.size; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (currentOrientation == Orientation.HORIZONTAL) {
                     Rectangle voisins = getCellFromGrid(row, col + i);
                     if (voisins != null) voisins.setFill(Color.LIGHTBLUE);

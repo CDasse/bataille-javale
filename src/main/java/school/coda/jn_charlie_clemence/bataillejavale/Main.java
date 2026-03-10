@@ -7,8 +7,8 @@ import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
 
 public class Main {
     public static void main(String[] args) {
-
         boolean isGodMode= args.length >= 1 && args[0].equals("test");
+
         BotPlayer bot = new BotPlayer("michel", 10 , 10);
         HumanPlayer player = new HumanPlayer("jn", 10, 10);
         Game partie = new Game(player, bot);
