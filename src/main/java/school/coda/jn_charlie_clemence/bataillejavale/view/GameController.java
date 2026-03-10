@@ -2,7 +2,9 @@ package school.coda.jn_charlie_clemence.bataillejavale.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
@@ -22,7 +24,13 @@ public class GameController {
     private GridPane playerGridPane;
     
     @FXML
-    private Label logLabel;
+    private TextArea logTextArea;
+
+    @FXML
+    private VBox playerFleetStatusBox;
+
+    @FXML
+    private VBox botFleetStatusBox;
 
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
@@ -32,10 +40,12 @@ public class GameController {
 
 
     private boolean isPlayerTurn = true;
+
+    private int gameTurn = 1;
     
     @FXML
     public void initialize() {
-        logLabel.setText("La bataille commence. Préparez vos canons !");
+        logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
 
         // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES
         humanPlayer = new HumanPlayer("Capitain Nemo", 10, 10);
@@ -49,9 +59,8 @@ public class GameController {
 
         // TODO : METTRE A JOUR AVEC MEME LARGEUR ET HAUTEUR QUE JOUEUR HUMAIN
         botPlayer = new BotPlayer("AI", 10, 10);
-//        botPlayer.placeCpuShip();
-        Ship testShip = new Ship("Torpilleur", 2);
-        botPlayer.getGrid().placeShip(testShip, 0, 0, Orientation.HORIZONTAL);
+        botPlayer.placeCpuShip();
+
         // TODO : A INITIALISER AVEC LES HAUTEUR ET LARGEUR CHOISIES
         humanCells = new Rectangle[10][10];
         botCells = new Rectangle[10][10];
@@ -83,11 +92,8 @@ public class GameController {
                     final int r = row;
                     final int c = col;
 
-                    cell.setOnMouseClicked(_ -> {
-                        handlePlayerShot(r, c);
-                    });
+                    cell.setOnMouseClicked(_ -> handlePlayerShot(r, c));
                 }
-
                 playerGridPane.add(cell, col, row);
             }
         }
@@ -99,8 +105,7 @@ public class GameController {
         Grid botGrid = botPlayer.getGrid();
 
         if (botGrid.isCellAlreadyTargeted(col, row)) {
-            logLabel.setText("Vous avez déjà tiré sur ces coordonnées ! Rejouez");
-            handlePlayerShot(row, col);
+            logTextArea.appendText("Vous avez déjà tiré sur ces coordonnées ! Rejouez\n");
             return;
         }
 
@@ -112,24 +117,23 @@ public class GameController {
             clickedCell.setFill(Color.RED);
 
             if (botGrid.allShipsSunk()) {
-                logLabel.setText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !");
+                logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
                 isPlayerTurn = false;
                 return;
             } else {
-                logLabel.setText("Navire ennemi TOUCHÉ en [" + col + "," + row + "] !");
+                logTextArea.appendText("Navire ennemi TOUCHÉ en [" + col + "," + row + "] !\n");
             }
         } else {
             clickedCell.setFill(Color.DARKGRAY);
-            logLabel.setText("Tir à l'eau en [" + col + "," + row + "].");
+            logTextArea.appendText("Tir à l'eau en [" + col + "," + row + "].\n");
         }
 
         isPlayerTurn = false;
-        turnLabel.setText("Tour de l'adversaire...");
+        updateFleetStatus(humanPlayer, playerFleetStatusBox);
         playBotTurn();
     }
 
     private void playBotTurn() {
-
         int[] botMove = botPlayer.getNextMove();
         int botX = botMove[0]; // col
         int botY = botMove[1]; // row
@@ -143,17 +147,39 @@ public class GameController {
             attackedCell.setFill(Color.RED);
 
             if (playerGrid.allShipsSunk()) {
-                logLabel.setText("DÉFAITE... Notre flotte a été anéantie.");
+                logTextArea.appendText("DÉFAITE... Notre flotte a été anéantie.\n");
                 return;
             } else {
-                logLabel.setText("Alerte ! Le Bot a touché notre navire en [" + botX + "," + botY + "] !");
+                logTextArea.appendText("Alerte ! Le Bot a touché notre navire en [" + botX + "," + botY + "] !\n");
             }
         } else {
             attackedCell.setFill(Color.DARKGRAY);
-            logLabel.setText("Le Bot a tiré à l'eau en [" + botX + "," + botY + "].");
+            logTextArea.appendText("Le Bot a tiré à l'eau en [" + botX + "," + botY + "].\n");
         }
 
         isPlayerTurn = true;
-        turnLabel.setText("À votre tour!");
+        gameTurn++;
+        updateFleetStatus(botPlayer, botFleetStatusBox);
+        turnLabel.setText("Tour " + gameTurn);
+    }
+
+    private void updateFleetStatus(Player player, VBox statusBox) {
+
+        statusBox.getChildren().clear();
+
+        for (Ship ship : player.getShips()) {
+            String status;
+
+            if (ship.isSunk()) {
+                status = "COULÉ ☠️";
+            } else if (ship.isTouched()) {
+                status = "Endommagé ⚠\uFE0F";
+            } else {
+                status = "Intact 🟢";
+            }
+
+            Label statusLabel = new Label(ship.getName() + " - " + status);
+            statusBox.getChildren().add(statusLabel);
+        }
     }
 }
