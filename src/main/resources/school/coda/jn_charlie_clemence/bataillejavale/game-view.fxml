@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+
+<VBox alignment="CENTER" spacing="30.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.GameController">
+
+    <Label fx:id="turnLabel" text="À votre tour !" />
+
+    <HBox alignment="CENTER" spacing="60.0">
+
+        <VBox alignment="CENTER" spacing="10.0">
+            <Label text="Votre Flotte" />
+            <GridPane fx:id="playerGridPane" alignment="CENTER"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="10.0">
+            <Label text="Eaux Ennemies (Tirez ici)" />
+            <GridPane fx:id="opponentGridPane" alignment="CENTER"/>
+        </VBox>
+
+    </HBox>
+
+    <Label fx:id="logLabel" text="En attente des premiers tirs..." textFill="GREY" />
+
+</VBox>
