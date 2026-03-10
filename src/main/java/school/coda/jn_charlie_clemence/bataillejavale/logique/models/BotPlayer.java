@@ -42,4 +42,5 @@ public class BotPlayer extends Player {
             } while (!(this.getGrid().placeShip(ship, randX, randY, randomOrientation)));
         }
     }
+
 }
