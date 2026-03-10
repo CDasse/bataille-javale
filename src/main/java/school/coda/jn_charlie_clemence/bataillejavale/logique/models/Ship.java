@@ -15,6 +15,10 @@ public class Ship {
         return this.size;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public int takeHit(){
         if (this.hp > 0) {
             this.hp -= 1;

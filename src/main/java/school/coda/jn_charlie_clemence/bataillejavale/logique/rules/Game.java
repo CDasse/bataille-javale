@@ -32,7 +32,15 @@ public class Game {
             opponent = this.player;
         }
 
-        opponent.getGrid().shoot(x, y);
+        boolean hit = opponent.getGrid().shoot(x, y);
+
+        if (this.currentPlayer == player){
+            System.out.println("Vous attaquez en LIGNE : " + y + " et COLONNE : " + x + ".");
+            System.out.println(hit ? "TOUCHÉ" : "MANQUÉ");
+        } else {
+            System.out.println(currentPlayer.getName() + " vous attaque en LIGNE : " + y + " et COLONNE : " + x + ".");
+            System.out.println(hit ? "Vous avez été touché" : "L'adversaire a maqnué son tir");
+        }
 
         if (isGameOver()) {
             this.isGameEnded = true;
@@ -51,7 +59,7 @@ public class Game {
     }
 
     public void nextCpuTurn() {
-        int[] coords = currentPlayer.getNextMove();
+        int[] coords = cpu.getNextMove();
         executeShot(coords[0], coords[1]);
     }
 

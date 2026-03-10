@@ -31,17 +31,17 @@ public class Grid {
         return false;
     }
 
-    public boolean canPLaceShip(Ship ship, int width, int height, Orientation orientation) {
+    public boolean canPLaceShip(Ship ship, int x, int y, Orientation orientation) {
+        if (orientation == HORIZONTAL) {
+            if (x < 0 || x + ship.getSize() > this.width) return false;
+        } else {
+            if (y < 0 || y + ship.getSize() > this.height) return false;
+        }
         for (int i = 0; i < ship.getSize(); i++) {
-            int currentWidth = width;
-            int currentHeight = height;
-            if (orientation == HORIZONTAL) {
-                currentHeight = height + i;
-            } else {
-                currentWidth = width + i;
-            }
+            int currentX = (orientation == HORIZONTAL) ? x + i : x;
+            int currentY = (orientation == VERTICAL) ? y + i : y;
 
-            if (currentWidth < 0 || currentWidth >= cells[0].length || currentHeight < 0 || currentHeight >= cells.length || !(cells[currentHeight][currentWidth].isEmpty())) {
+            if (currentX < 0 || currentX >= cells[0].length || currentY < 0 || currentY >= cells.length || !(cells[currentY][currentX].isEmpty())) {
                 return false;
             }
         }
@@ -95,9 +95,9 @@ public class Grid {
                 //Affichage de la grille
                 String symbol = "~ ";
                 if (cell.isTargeted()) {
-                    symbol = cell.isEmpty() ? "O" : "X";
+                    symbol = cell.isEmpty() ? "O " : "X ";
                 } else if (!isRadar && !cell.isEmpty()) {
-                    symbol = "S";
+                    symbol = "S ";
                 }
                 IO.print(symbol);
             }
