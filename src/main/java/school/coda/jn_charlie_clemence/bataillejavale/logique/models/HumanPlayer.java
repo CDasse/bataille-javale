@@ -16,20 +16,25 @@ public class HumanPlayer extends Player{
     @Override
     public int[] getNextMove() {
         IO.println("C'est à votre tour!\n PHASE DE TIR");
-        int targetedX = askForInt("Coordonnées colonne (axe X) : ");
-        int targetedY = askForChar("Coordonnées ligne (axe Y) : ");
+        int maxX = getGrid().getWidth() - 1;
+        int maxY = getGrid().getHeight();
+        int targetedX = askForInt("Coordonnées colonne (axe X) : ", 0, maxX);
+        int targetedY = askForChar("Coordonnées ligne (axe Y) : ", maxY);
         return new int[]{targetedX, targetedY};
     }
 
     public void placeShip(){
+        int maxX = getGrid().getWidth() - 1;
+        int maxY = getGrid().getHeight();
+
         for (Ship ship : getShips()){
             boolean placed = false;
             while (!placed) {
                 System.out.println("\nPlacement du navire : " + ship.getName() + " (Taille: " + ship.getSize() + ")");
                 getGrid().display(false);
 
-                int x = askForInt("Colonne (axe X) : ");
-                int y = askForChar("Ligne (axe Y) : ");
+                int x = askForInt("Colonne (axe X) : ", 0, maxX);
+                int y = askForChar("Ligne (axe Y) : ", maxY);
                 Orientation orientation = askForOrientation();
 
                 placed = getGrid().placeShip(ship, x, y , orientation);
