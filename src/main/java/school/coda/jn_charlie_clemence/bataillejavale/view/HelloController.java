@@ -1,23 +1,27 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.io.IOException;
 
 
-public class HelloController implements Initializable {
+public class HelloController {
 
     @FXML
     private GridPane gridPane
@@ -63,11 +67,6 @@ public class HelloController implements Initializable {
 
     @FXML
     private Rectangle[][] casesCoordinates;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 
     private void initializeGrid(int height,int width) {
         this.grid = new Grid(height, width);
@@ -142,8 +141,6 @@ public class HelloController implements Initializable {
         });
     }
 
-
-
     private void visualisationOnMouseEnter(Grid grid, Rectangle cell, Ship ship, int row, int col) {
         cell.setOnMouseEntered(_ -> {
             for (int i = 0; i < ship.getSize(); i++) {
@@ -180,5 +177,17 @@ public class HelloController implements Initializable {
             return casesCoordinates[row][col];
         }
         return null;
+    }
+
+    public void gameButton(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        Scene scene = new Scene(root, 1080, 720);
+        stage.setTitle("Bataille Javal");
+        stage.setScene(scene);
+        stage.show();
     }
 }

@@ -46,4 +46,6 @@
             majorTickUnit="1"
             minorTickCount="0"
             snapToTicks="true" />
+
+    <Button text="Lancer la partie" onAction="#gameButton" />
 </VBox>

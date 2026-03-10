@@ -24,4 +24,8 @@ public abstract class Player {
     public List<Ship> getShips () {
         return this.ships;
     }
+
+    public String getName(){
+        return this.name;
+    }
 }

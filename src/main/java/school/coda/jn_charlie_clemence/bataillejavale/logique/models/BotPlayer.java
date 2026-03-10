@@ -11,8 +11,8 @@ public class BotPlayer extends Player {
 
     @Override
     public int[] getNextMove() {
-        RandomGenerator rand = new Random();
-//RandomGenerator r = () -> 0;
+        Random rand = new Random();
+
         int maxX = this.getGrid().getWidth();
         int maxY = this.getGrid().getHeight();
 
@@ -42,4 +42,5 @@ public class BotPlayer extends Player {
             } while (!(this.getGrid().placeShip(ship, randX, randY, randomOrientation)));
         }
     }
+
 }
