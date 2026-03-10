@@ -56,69 +56,72 @@ public class HelloController {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 
-                Rectangle cell = new Rectangle(20, 20); // Taille de 20px
+                Rectangle cell = new Rectangle(20, 20);
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
                 casesCoordinates[row][col] = cell;
 
-                final int r = row;
-                final int c = col;
-
                 Ship ship = new Ship("porte-avions", 3);
 
-                cell.setOnMouseEntered(_ -> {
-                    for (int i = 0; i < ship.getSize(); i++) {
-                        if (currentOrientation == Orientation.HORIZONTAL) {
-                            Rectangle voisin = getCellFromGrid(r, c + i);
-                            if (grid.canPLaceShip(ship, r, c, currentOrientation)) {
-                                if (voisin != null) voisin.setFill(Color.LIGHTGREEN);
-                            } else {
-                                if (voisin != null) voisin.setFill(Color.LIGHTCORAL);
-                            }
-                        } else {
-                            Rectangle voisin = getCellFromGrid(r + i, c);
-                            if (grid.canPLaceShip(ship, r, c, currentOrientation)) {
-                                if (voisin != null) voisin.setFill(Color.LIGHTGREEN);
-                            } else {
-                                if (voisin != null) voisin.setFill(Color.LIGHTCORAL);
-                            }
-                        }
-                    }
-                });
+                visualisationOnMouseEnter(grid, cell, ship, row, col);
 
-                cell.setOnMouseExited(_ -> {
-                    for (int i = 0; i < 3; i++) {
-                        if (currentOrientation == Orientation.HORIZONTAL) {
-                            Rectangle voisins = getCellFromGrid(r, c + i);
-                            if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
-                        } else {
-                            Rectangle voisins = getCellFromGrid(r + i, c);
-                            if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
-                        }
-                    }
-                });
+                hideVisualisationOnMouseExit(cell, row, col);
+
                 gridPane.add(cell, col, row);
             }
         }
-        setupKeyboardControls();
+        toggleOrientation();
     }
 
-    private void setupKeyboardControls() {
-        myGridPane.getScene().setOnKeyPressed(event -> {
-            if (event.getCode() == javafx.scene.input.KeyCode.R) {
-                // On bascule l'orientation
-                currentOrientation = (currentOrientation == Orientation.HORIZONTAL)
-                        ? Orientation.VERTICAL : Orientation.HORIZONTAL;
-                System.out.println("Orientation : " + currentOrientation);
+    private void hideVisualisationOnMouseExit(Rectangle cell, int row, int col) {
+        cell.setOnMouseExited(_ -> {
+            for (int i = 0; i < 3; i++) {
+                if (currentOrientation == Orientation.HORIZONTAL) {
+                    Rectangle voisins = getCellFromGrid(row, col + i);
+                    if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
+                } else {
+                    Rectangle voisins = getCellFromGrid(row + i, col);
+                    if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
+                }
             }
         });
     }
 
-    private Rectangle getCellFromGrid(int r, int c) {
-        // On vérifie si les coordonnées r et c sont bien dans les limites du tableau
-        if (casesCoordinates != null && r >= 0 && r < casesCoordinates.length && c >= 0 && c < casesCoordinates[0].length) {
-            return casesCoordinates[r][c];
+    private void visualisationOnMouseEnter(Grid grid, Rectangle cell, Ship ship, int row, int col) {
+        cell.setOnMouseEntered(_ -> {
+            for (int i = 0; i < ship.getSize(); i++) {
+                if (currentOrientation == Orientation.HORIZONTAL) {
+                    Rectangle voisin = getCellFromGrid(row, col + i);
+                    setColorGrid(grid, ship, row, col, voisin);
+                } else {
+                    Rectangle voisin = getCellFromGrid(row + i, col);
+                    setColorGrid(grid, ship, row, col, voisin);
+                }
+            }
+        });
+    }
+
+    private void setColorGrid(Grid grid, Ship ship, int row, int col, Rectangle voisin) {
+        if (grid.canPLaceShip(ship, row, col, currentOrientation)) {
+            if (voisin != null) voisin.setFill(Color.LIGHTGREEN);
+        } else {
+            if (voisin != null) voisin.setFill(Color.LIGHTCORAL);
+        }
+    }
+
+    private void toggleOrientation() {
+        myGridPane.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.R) {
+                currentOrientation = (currentOrientation == Orientation.HORIZONTAL)
+                        ? Orientation.VERTICAL : Orientation.HORIZONTAL;
+            }
+        });
+    }
+
+    private Rectangle getCellFromGrid(int row, int col) {
+        if (casesCoordinates != null && row >= 0 && row < casesCoordinates.length && col >= 0 && col < casesCoordinates[0].length) {
+            return casesCoordinates[row][col];
         }
         return null;
     }
