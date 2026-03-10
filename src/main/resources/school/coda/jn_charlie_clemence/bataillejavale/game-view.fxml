@@ -17,7 +17,7 @@
 
         <VBox alignment="CENTER" spacing="10.0">
             <Label text="Eaux Ennemies (Tirez ici)" />
-            <GridPane fx:id="opponentGridPane" alignment="CENTER"/>
+            <GridPane fx:id="botGridPane" alignment="CENTER"/>
         </VBox>
 
     </HBox>

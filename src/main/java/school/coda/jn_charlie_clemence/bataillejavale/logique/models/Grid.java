@@ -70,6 +70,10 @@ public class Grid {
         return cells[y][x].isTargeted();
     }
 
+    public boolean isCellEmpty (int x, int y) {
+        return cells[y][x].isEmpty();
+    }
+
     public int getWidth() {
         return this.width;
     }
