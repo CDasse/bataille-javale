@@ -8,9 +8,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
-
-import java.util.List;
 
 public class GameController {
     
@@ -49,10 +46,8 @@ public class GameController {
 
         // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES
         humanPlayer = new HumanPlayer("Capitain Nemo", 10, 10);
-        List<Ship> playerFleet = ShipFactory.createFleet();
-        IO.println(playerFleet);
         int ligne = 0;
-        for (Ship ship : playerFleet) {
+        for (Ship ship : humanPlayer.getShips()) {
             humanPlayer.getGrid().placeShip(ship, 0, ligne, Orientation.HORIZONTAL);
             ligne += 2;
         }
