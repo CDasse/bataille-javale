@@ -98,16 +98,6 @@ public class HelloController {
                         }
                     }
                 });
-
-
-
-//                cell.setOnMouseClicked(_ -> {
-//                    char lettre = (char) ('A' + c);
-//                    System.out.println(r + ":" + c);
-//
-//                    cell.setFill(Color.DARKBLUE);
-//                });
-
                 gridPane.add(cell, col, row);
             }
         }
@@ -132,5 +122,4 @@ public class HelloController {
         }
         return null;
     }
-
 }
