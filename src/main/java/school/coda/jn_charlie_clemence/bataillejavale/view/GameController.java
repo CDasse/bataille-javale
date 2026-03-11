@@ -15,36 +15,34 @@ public class GameController {
     private Label turnLabel;
 
     @FXML
-    private GridPane botGridPane;
-
-    @FXML
     private GridPane playerGridPane;
-    
-    @FXML
-    private TextArea logTextArea;
 
     @FXML
     private VBox playerFleetStatusBox;
 
     @FXML
+    private GridPane botGridPane;
+
+    @FXML
     private VBox botFleetStatusBox;
+
+    @FXML
+    private TextArea logTextArea;
 
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
 
-    Rectangle[][] humanCells;
-    Rectangle[][] botCells;
-
+    private Rectangle[][] humanCells;
+    private Rectangle[][] botCells;
 
     private boolean isPlayerTurn = true;
-
     private int gameTurn = 1;
     
     @FXML
     public void initialize() {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
 
-        // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES
+        // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES + PLACEMENT FLOTTE
         humanPlayer = new HumanPlayer("Capitain Nemo", 10, 10);
         int ligne = 0;
         for (Ship ship : humanPlayer.getShips()) {
@@ -62,6 +60,9 @@ public class GameController {
 
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
+
+        updateFleetStatus(humanPlayer, playerFleetStatusBox);
+        updateFleetStatus(botPlayer, botFleetStatusBox);
     }
 
     private void drawGrid(GridPane playerGridPane, Grid grid, boolean isClickable, Rectangle[][] cellArray) {
@@ -110,7 +111,6 @@ public class GameController {
 
         if (isHit) {
             clickedCell.setFill(Color.RED);
-
             if (botGrid.allShipsSunk()) {
                 logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
                 isPlayerTurn = false;
@@ -124,7 +124,7 @@ public class GameController {
         }
 
         isPlayerTurn = false;
-        updateFleetStatus(humanPlayer, playerFleetStatusBox);
+        updateFleetStatus(botPlayer, botFleetStatusBox);
         playBotTurn();
     }
 
@@ -154,27 +154,25 @@ public class GameController {
 
         isPlayerTurn = true;
         gameTurn++;
-        updateFleetStatus(botPlayer, botFleetStatusBox);
+        updateFleetStatus(humanPlayer, playerFleetStatusBox);
         turnLabel.setText("Tour " + gameTurn);
     }
 
     private void updateFleetStatus(Player player, VBox statusBox) {
-
         statusBox.getChildren().clear();
 
         for (Ship ship : player.getShips()) {
-            String status;
-
             if (ship.isSunk()) {
-                status = "COULÉ ☠️";
-            } else if (ship.isTouched()) {
-                status = "Endommagé ⚠\uFE0F";
-            } else {
-                status = "Intact 🟢";
+                Label statusLabel = new Label(ship.getName() + " - COULÉ ☠️");
+                statusLabel.setTextFill(Color.DARKRED);
+                statusBox.getChildren().add(statusLabel);
             }
+        }
 
-            Label statusLabel = new Label(ship.getName() + " - " + status);
-            statusBox.getChildren().add(statusLabel);
+        if (statusBox.getChildren().isEmpty()) {
+            Label allSafeLabel = new Label("Tous les navires sont à flot.");
+            allSafeLabel.setTextFill(Color.GRAY);
+            statusBox.getChildren().add(allSafeLabel);
         }
     }
 }
