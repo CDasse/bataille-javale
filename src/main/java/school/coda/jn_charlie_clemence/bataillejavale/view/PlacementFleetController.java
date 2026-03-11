@@ -79,8 +79,8 @@ public class PlacementFleetController {
         this.grid = new Grid(height, width);
         this.gridPane.getChildren().clear();
 
-        int rows = grid.getWidth();
-        int cols = grid.getHeight();
+        int rows = grid.getHeight();
+        int cols = grid.getWidth();
 
         casesCoordinates = new Rectangle[rows][cols];
 
@@ -113,8 +113,8 @@ public class PlacementFleetController {
                 cell.setOnMouseClicked(_ -> {
                     if (shipToPlace != null) {
                         Ship ship = getShipToPlace(playerFleet);
-                        if (grid.canPLaceShip(ship, r, c, currentOrientation)) {
-                            grid.placeShip(ship, r, c, currentOrientation);
+                        if (grid.canPLaceShip(ship, c, r, currentOrientation)) {
+                            grid.placeShip(ship, c, r, currentOrientation);
                             fixShipToGrid(r, c, ship.getSize());
                         }
                     }
@@ -126,7 +126,7 @@ public class PlacementFleetController {
     }
 
     private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
-        boolean canPlace = grid.canPLaceShip(ship, row, col, currentOrientation);
+        boolean canPlace = grid.canPLaceShip(ship, col, row, currentOrientation);
 
         for (int i = 0; i < ship.getSize(); i++) {
             Rectangle voisin = getTargetCell(row, col, i);
@@ -140,7 +140,7 @@ public class PlacementFleetController {
             int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
 
             Rectangle voisin = getCellFromGrid(targetR, targetC);
-            if (voisin != null && grid.isCellEmpty(targetR, targetC)) {
+            if (voisin != null && grid.isCellEmpty(targetC, targetR)) {
                 voisin.setFill(Color.LIGHTBLUE);
             }
         }
