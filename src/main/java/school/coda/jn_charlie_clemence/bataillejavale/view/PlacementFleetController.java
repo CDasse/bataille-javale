@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class HelloController {
+public class PlacementFleetController {
 
     @FXML
-    private GridPane gridPane
-            ;
+    private GridPane gridPane;
+
     @FXML
     private Slider widthSlider;
 
@@ -63,6 +63,7 @@ public class HelloController {
         this.shipToPlace = EnumShip.PORTEAVIONS;
         welcomeText.setText("Placement : Porte-Avions");
     }
+
     @FXML
     private void addCuirasse() {
         this.shipToPlace = EnumShip.CUIRASSE;

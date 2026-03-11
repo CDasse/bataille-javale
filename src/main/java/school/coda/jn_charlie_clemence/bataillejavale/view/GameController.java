@@ -1,5 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -7,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 
 public class GameController {
@@ -125,7 +127,11 @@ public class GameController {
 
         isPlayerTurn = false;
         updateFleetStatus(botPlayer, botFleetStatusBox);
-        playBotTurn();
+
+        turnLabel.setText("L'adversaire réfléchit...");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.setOnFinished(event -> playBotTurn());
+        pause.play();
     }
 
     private void playBotTurn() {
