@@ -17,8 +17,11 @@ import school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
 
 
 public class HelloController {
@@ -51,18 +54,25 @@ public class HelloController {
         welcomeText.setText("New grid generated !");
     }
 
+    List<Ship> playerFleet = ShipFactory.createFleet();
+
     private EnumShip shipToPlace;
 
     @FXML
     private void addPorteAvions() {
-        shipToPlace = EnumShip.PORTEAVIONS;
+        this.shipToPlace = EnumShip.PORTEAVIONS;
+        welcomeText.setText("Placement : Porte-Avions");
     }
     @FXML
     private void addCuirasse() {
-        shipToPlace = EnumShip.CUIRASSE;
-    }@FXML
+        this.shipToPlace = EnumShip.CUIRASSE;
+        welcomeText.setText("Placement : Cuirassé");
+    }
+
+    @FXML
     private void addDestroyer() {
-        shipToPlace = EnumShip.DESTROYER;
+        this.shipToPlace = EnumShip.DESTROYER;
+        welcomeText.setText("Placement : Destroyer");
     }
 
     @FXML
@@ -89,70 +99,76 @@ public class HelloController {
 
                 casesCoordinates[row][col] = cell;
 
-                Ship ship = new Ship("porte-avions", 3);
+                cell.setOnMouseEntered(_ -> {
+                    if (shipToPlace != null) {
+                        Ship ship = shipToPlaceTest(playerFleet);
+                        visualisationOnMouseEnter(grid, ship, r, c);
+                    }
+                });
 
-                visualisationOnMouseEnter(grid, cell, ship, row, col);
-
-                hideVisualisationOnMouseExit(cell, row, col);
-
-                gridPane.add(cell, col, row);
+                cell.setOnMouseExited(_ -> {
+                    if (shipToPlace != null) {
+                        Ship ship = shipToPlaceTest(playerFleet);
+                        hideVisualisationOnMouseExit(r, c, ship.getSize());
+                    }
+                });
 
                 cell.setOnMouseClicked(_ -> {
-                    switch (shipToPlace) {
-                        case PORTEAVIONS -> {
-                            IO.println("PORTEAVIONS");
-                            if (currentOrientation == Orientation.HORIZONTAL) {
-                                for (int i = 0; i < 5; i++) {
-                                    IO.println(r + ":" + (c + i));
-                                    Rectangle voisins = getCellFromGrid(r, c + i);
-                                    if (voisins != null) voisins.setFill(Color.DARKBLUE);
-                                    IO.println(shipToPlace.size);
-                                }
-                            } else {
-                                for (int i = 0; i < 5; i++) {
-                                    IO.println((r + i) + ":" + c);
-                                    Rectangle voisins = getCellFromGrid(r + i, c);
-                                    if (voisins != null) voisins.setFill(Color.DARKBLUE);
-                                }
-                            }
+                    if (shipToPlace != null) {
+                        Ship ship = shipToPlaceTest(playerFleet);
+                        if (grid.canPLaceShip(ship, r, c, currentOrientation)) {
+                            grid.placeShip(ship, r, c, currentOrientation);
+                            fixerBateauSurVisuel(r, c, ship.getSize());
                         }
-                        case CUIRASSE -> IO.println("CUIRASSE");
-                        case DESTROYER -> IO.println("DESTROYER");
-                        default -> IO.println("Sélectionnez un bateau !");
                     }
-                    IO.println(r + ":" + c);
                 });
+
+                gridPane.add(cell, col, row);
             }
         }
         toggleOrientation();
     }
 
-    private void hideVisualisationOnMouseExit(Rectangle cell, int row, int col) {
-        cell.setOnMouseExited(_ -> {
-            for (int i = 0; i < shipToPlace.size; i++) {
-                if (currentOrientation == Orientation.HORIZONTAL) {
-                    Rectangle voisins = getCellFromGrid(row, col + i);
-                    if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
-                } else {
-                    Rectangle voisins = getCellFromGrid(row + i, col);
-                    if (voisins != null) voisins.setFill(Color.LIGHTBLUE);
-                }
+    private Ship shipToPlaceTest(List<Ship> playerFleet) {
+        if (shipToPlace == null) return null;
+        for (Ship shipOfFleet : playerFleet) {
+            if (Objects.equals(shipOfFleet.getName(), shipToPlace.name)) {
+                return shipOfFleet;
             }
-        });
+        }
+        return new Ship("error", 1);
     }
 
-    private void visualisationOnMouseEnter(Grid grid, Rectangle cell, Ship ship, int row, int col) {
-        cell.setOnMouseEntered(_ -> {
-            for (int i = 0; i < ship.getSize(); i++) {
-                if (currentOrientation == Orientation.HORIZONTAL) {
-                    Rectangle voisin = getCellFromGrid(row, col + i);
-                    setColorGrid(grid, ship, row, col, voisin);
-                } else {
-                    Rectangle voisin = getCellFromGrid(row + i, col);
-                    setColorGrid(grid, ship, row, col, voisin);
-                }
+    private void hideVisualisationOnMouseExit(int row, int col, int size) {
+        for (int i = 0; i < size; i++) {
+            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+
+            Rectangle voisin = getCellFromGrid(targetR, targetC);
+            if (voisin != null && grid.isCellEmpty(targetR, targetC)) {
+                voisin.setFill(Color.LIGHTBLUE);
             }
-        });
+        }
+    }
+
+    private void fixerBateauSurVisuel(int row, int col, int size) {
+        for (int i = 0; i < size; i++) {
+            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+
+            Rectangle b = getCellFromGrid(targetR, targetC);
+            if (b != null) b.setFill(Color.DARKSLATEGRAY);
+        }
+    }
+
+    private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
+        for (int i = 0; i < ship.getSize(); i++) {
+            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+
+            Rectangle voisin = getCellFromGrid(targetR, targetC);
+            setColorGrid(grid, ship, row, col, voisin);
+        }
     }
 
     private void setColorGrid(Grid grid, Ship ship, int row, int col, Rectangle voisin) {
