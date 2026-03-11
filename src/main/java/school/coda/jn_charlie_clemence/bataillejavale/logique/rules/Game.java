@@ -3,6 +3,7 @@ package school.coda.jn_charlie_clemence.bataillejavale.logique.rules;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.BotPlayer;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.HumanPlayer;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Player;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 
 public class Game {
     private final Player player;
@@ -33,14 +34,24 @@ public class Game {
         }
 
         boolean hit = opponent.getGrid().shoot(x, y);
+        String status = "MANQUÉ";
+
+        if (hit) {
+            status = "TOUCHÉ";
+
+            Ship shipHit = opponent.getGrid().getShipAt(x, y);
+
+            if (shipHit != null && shipHit.isSunk()) {
+                status = "COULÉ (" + shipHit.getName() + ")";
+            }
+        }
 
         if (this.currentPlayer == player){
-            System.out.println("Vous attaquez en LIGNE : " + y + " et COLONNE : " + x + ".");
-            System.out.println(hit ? "TOUCHÉ" : "MANQUÉ");
+            System.out.println("Vous attaquez en LIGNE : " + y + " et COLONNE : " + x + ".  ////////   " + status);
         } else {
-            System.out.println(currentPlayer.getName() + " vous attaque en LIGNE : " + y + " et COLONNE : " + x + ".");
-            System.out.println(hit ? "Vous avez été touché" : "L'adversaire a maqnué son tir");
+            System.out.println(currentPlayer.getName() + " vous attaque en LIGNE : " + y + " et COLONNE : " + x + ".  ////////   " + status);
         }
+
 
         if (isGameOver()) {
             this.isGameEnded = true;

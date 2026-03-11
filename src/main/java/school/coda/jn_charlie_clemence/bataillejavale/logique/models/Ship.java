@@ -30,5 +30,12 @@ public class Ship {
         return this.hp == 0;
     }
 
+    public boolean isTouched() {
+        if (this.isSunk()) return false;
+        if (this.hp < this.size) return true;
+
+        return false;
+    }
+
 }
 
