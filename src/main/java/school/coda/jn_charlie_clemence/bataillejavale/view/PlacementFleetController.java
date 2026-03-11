@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -39,24 +38,15 @@ public class PlacementFleetController {
     private Label welcomeText;
 
     @FXML
-    private VBox scene;
+    private Rectangle[][] casesCoordinates;
 
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
     private Grid grid;
 
-    @FXML
-    protected void initializeGridView() {
-        int width = (int) widthSlider.getValue();
-        int height = (int) heightSlider.getValue();
-
-        initializeGrid(height,width);
-        welcomeText.setText("New grid generated !");
-    }
-
-    List<Ship> playerFleet = ShipFactory.createFleet();
-
     private EnumShip shipToPlace;
+
+    private final List<Ship> playerFleet = ShipFactory.createFleet();
 
     @FXML
     private void addPorteAvions() {
@@ -77,7 +67,13 @@ public class PlacementFleetController {
     }
 
     @FXML
-    private Rectangle[][] casesCoordinates;
+    protected void initializeGridView() {
+        int width = (int) widthSlider.getValue();
+        int height = (int) heightSlider.getValue();
+
+        initializeGrid(height,width);
+        welcomeText.setText("New grid generated !");
+    }
 
     private void initializeGrid(int height,int width) {
         this.grid = new Grid(height, width);
@@ -102,42 +98,40 @@ public class PlacementFleetController {
 
                 cell.setOnMouseEntered(_ -> {
                     if (shipToPlace != null) {
-                        Ship ship = shipToPlaceTest(playerFleet);
+                        Ship ship = getShipToPlace(playerFleet);
                         visualisationOnMouseEnter(grid, ship, r, c);
                     }
                 });
 
                 cell.setOnMouseExited(_ -> {
                     if (shipToPlace != null) {
-                        Ship ship = shipToPlaceTest(playerFleet);
+                        Ship ship = getShipToPlace(playerFleet);
                         hideVisualisationOnMouseExit(r, c, ship.getSize());
                     }
                 });
 
                 cell.setOnMouseClicked(_ -> {
                     if (shipToPlace != null) {
-                        Ship ship = shipToPlaceTest(playerFleet);
+                        Ship ship = getShipToPlace(playerFleet);
                         if (grid.canPLaceShip(ship, r, c, currentOrientation)) {
                             grid.placeShip(ship, r, c, currentOrientation);
-                            fixerBateauSurVisuel(r, c, ship.getSize());
+                            fixShipToGrid(r, c, ship.getSize());
                         }
                     }
                 });
-
                 gridPane.add(cell, col, row);
             }
         }
         toggleOrientation();
     }
 
-    private Ship shipToPlaceTest(List<Ship> playerFleet) {
-        if (shipToPlace == null) return null;
-        for (Ship shipOfFleet : playerFleet) {
-            if (Objects.equals(shipOfFleet.getName(), shipToPlace.name)) {
-                return shipOfFleet;
-            }
+    private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
+        boolean canPlace = grid.canPLaceShip(ship, row, col, currentOrientation);
+
+        for (int i = 0; i < ship.getSize(); i++) {
+            Rectangle voisin = getTargetCell(row, col, i);
+            voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
         }
-        return new Ship("error", 1);
     }
 
     private void hideVisualisationOnMouseExit(int row, int col, int size) {
@@ -152,34 +146,6 @@ public class PlacementFleetController {
         }
     }
 
-    private void fixerBateauSurVisuel(int row, int col, int size) {
-        for (int i = 0; i < size; i++) {
-            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
-            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
-
-            Rectangle b = getCellFromGrid(targetR, targetC);
-            if (b != null) b.setFill(Color.DARKSLATEGRAY);
-        }
-    }
-
-    private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
-        for (int i = 0; i < ship.getSize(); i++) {
-            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
-            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
-
-            Rectangle voisin = getCellFromGrid(targetR, targetC);
-            setColorGrid(grid, ship, row, col, voisin);
-        }
-    }
-
-    private void setColorGrid(Grid grid, Ship ship, int row, int col, Rectangle voisin) {
-        if (grid.canPLaceShip(ship, row, col, currentOrientation)) {
-            if (voisin != null) voisin.setFill(Color.LIGHTGREEN);
-        } else {
-            if (voisin != null) voisin.setFill(Color.LIGHTCORAL);
-        }
-    }
-
     private void toggleOrientation() {
         gridPane.getScene().setOnKeyPressed(event -> {
             if (event.getCode() == javafx.scene.input.KeyCode.R) {
@@ -187,6 +153,23 @@ public class PlacementFleetController {
                         ? Orientation.VERTICAL : Orientation.HORIZONTAL;
             }
         });
+    }
+
+    private Ship getShipToPlace(List<Ship> playerFleet) {
+        if (shipToPlace == null) return null;
+        for (Ship shipOfFleet : playerFleet) {
+            if (Objects.equals(shipOfFleet.getName(), shipToPlace.name)) {
+                return shipOfFleet;
+            }
+        }
+        return null;
+    }
+
+    private void fixShipToGrid(int row, int col, int size) {
+        for (int i = 0; i < size; i++) {
+            Rectangle cell = getTargetCell(row, col, i);
+            if (cell != null) cell.setFill(Color.DARKSLATEGRAY);
+        }
     }
 
     private Rectangle getCellFromGrid(int row, int col) {
@@ -206,5 +189,11 @@ public class PlacementFleetController {
         stage.setTitle("Bataille Javal");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Rectangle getTargetCell(int startRow, int startCol, int index) {
+        int targetR = (currentOrientation == Orientation.HORIZONTAL) ? startRow : startRow + index;
+        int targetC = (currentOrientation == Orientation.HORIZONTAL) ? startCol + index : startCol;
+        return getCellFromGrid(targetR, targetC);
     }
 }

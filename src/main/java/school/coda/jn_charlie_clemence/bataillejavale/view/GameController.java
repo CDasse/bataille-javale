@@ -130,7 +130,7 @@ public class GameController {
 
         turnLabel.setText("L'adversaire réfléchit...");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-        pause.setOnFinished(event -> playBotTurn());
+        pause.setOnFinished(_ -> playBotTurn());
         pause.play();
     }
 
