@@ -9,22 +9,31 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 
+import javafx.scene.media.AudioClip;
+import java.net.URL;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 
 public class PlacementFleetController {
+
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.mp3");
+    private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
 
     @FXML
     private GridPane gridPane;
@@ -39,7 +48,13 @@ public class PlacementFleetController {
     private Label welcomeText;
 
     @FXML
+    private Label shipAlreadyPlaced;
+
+    @FXML
     private Rectangle[][] casesCoordinates;
+
+    @FXML
+    private VBox playerFleetStatusBox;
 
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
@@ -81,6 +96,7 @@ public class PlacementFleetController {
 
     @FXML
     protected void initializeGridView() {
+        playerFleetStatusBox.getChildren().clear();
         int width = (int) widthSlider.getValue();
         int height = (int) heightSlider.getValue();
 
@@ -132,6 +148,12 @@ public class PlacementFleetController {
                         if (grid.canPlaceShip(ship, c, r, currentOrientation)) {
                             grid.placeShip(ship, c, r, currentOrientation);
                             fixShipToGrid(r, c, ship.getSize());
+                            updateFleetStatus(playerFleetStatusBox, ship);
+                            shipAlreadyPlaced.setText("");
+                            playPlacementSound();
+                        } else {
+                            shipAlreadyPlaced.setText("Bateau déja placé !");
+                            shipAlreadyPlaced.setTextFill(Color.RED);
                         }
                     }
                 });
@@ -147,21 +169,35 @@ public class PlacementFleetController {
         for (int i = 0; i < ship.getSize(); i++) {
             Rectangle voisin = getTargetCell(row, col, i);
             if (voisin != null) {
-                voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
+                int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+                int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+
+                if (grid.isCellEmpty(targetCol, targetRow)) {
+                    voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
+                }
             }
         }
+
     }
 
     private void hideVisualisationOnMouseExit(int row, int col, int size) {
         for (int i = 0; i < size; i++) {
-            int targetR = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
-            int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+            Rectangle voisin = getTargetCell(row, col, i); // Utilise ta méthode !
 
-            Rectangle voisin = getCellFromGrid(targetR, targetC);
-            if (voisin != null && grid.isCellEmpty(targetC, targetR)) {
-                voisin.setFill(Color.LIGHTBLUE);
+            if (voisin != null) {
+                int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+                int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+
+                if (grid.isCellEmpty(targetCol, targetRow)) {
+                    voisin.setFill(Color.LIGHTBLUE);
+                }
             }
         }
+    }
+
+    private void updateFleetStatus(VBox playerFleetStatusBox, Ship ship) {
+        Label statusLabel = new Label(ship.getName());
+        playerFleetStatusBox.getChildren().add(statusLabel);
     }
 
     private void toggleOrientation() {
@@ -198,6 +234,9 @@ public class PlacementFleetController {
     }
 
     public void gameButton(ActionEvent event) throws IOException {
+        if (grid.getListShipsPlaced().size() < 5) {
+            return;
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
 

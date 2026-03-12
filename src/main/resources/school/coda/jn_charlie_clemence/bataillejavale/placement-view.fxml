@@ -37,7 +37,7 @@
             showTickMarks="true"
             majorTickUnit="1"
             minorTickCount="0"
-            snapToTicks="true" />
+            snapToTicks="true"/>
 
     <Label>Height of grid :</Label>
     <Slider fx:id="heightSlider"
@@ -48,7 +48,14 @@
             showTickMarks="true"
             majorTickUnit="1"
             minorTickCount="0"
-            snapToTicks="true" />
+            snapToTicks="true"/>
 
-    <Button text="Lancer la partie" onAction="#gameButton" />
+    <Button text="Lancer la partie" onAction="#gameButton"/>
+
+    <VBox alignment="CENTER" spacing="10.0">
+        <Label style="-fx-font-weight: bold;" text="Vos bateaux placés :"/>
+        <VBox fx:id="playerFleetStatusBox" spacing="5.0"/>
+    </VBox>
+
+    <Label fx:id="shipAlreadyPlaced" />
 </VBox>

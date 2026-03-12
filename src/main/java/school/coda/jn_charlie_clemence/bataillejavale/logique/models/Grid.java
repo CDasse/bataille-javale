@@ -10,7 +10,13 @@ public class Grid {
     private final Cell[][] cells;
     private final int width;
     private final int height;
-    private List<String> shipsAlreadyPlaced;
+    private final List<String> shipsAlreadyPlaced;
+
+    public List<String> getListShipsPlaced() {
+        List<String> shipList = new ArrayList<>(5);
+        shipList.addAll(shipsAlreadyPlaced);
+        return shipList;
+    }
 
     public Grid(int height, int width) {
         this.cells = new Cell[height][width];
