@@ -14,14 +14,14 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int[] getNextMove() {
+    public int[] getNextMove(Grid ennemyGrid) {
         IO.println("C'est à votre tour!\n PHASE DE TIR");
         int maxX = getGrid().getWidth() - 1;
         int maxY = getGrid().getHeight();
         int targetedX = askForInt("Coordonnées colonne (axe X) : ", 0, maxX);
         int targetedY = askForChar("Coordonnées ligne (axe Y) : ", maxY);
 
-        while (getGrid().isCellAlreadyTargeted(targetedX, targetedY)) {
+        while (ennemyGrid.isCellAlreadyTargeted(targetedX, targetedY)) {
             System.out.println("Vous avez déjà tiré sur cette case ! Choisissez une autre cible.");
             targetedX = askForInt("Coordonnées colonne (axe X) : ", 0, maxX);
             targetedY = askForChar("Coordonnées ligne (axe Y) : ", maxY);

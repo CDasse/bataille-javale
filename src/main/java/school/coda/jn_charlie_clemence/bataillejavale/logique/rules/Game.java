@@ -33,12 +33,12 @@ public class Game {
             opponent = this.player;
         }
 
-        if (opponent.getGrid().isCellAlreadyTargeted(x, y)) {
-            if (this.currentPlayer == player) {
-                System.out.println("Cible déjà visée, recommencez !");
-            }
-            return;
-        }
+//        if (opponent.getGrid().isCellAlreadyTargeted(x, y)) {
+//            if (this.currentPlayer == player) {
+//                System.out.println("Cible déjà visée, recommencez !");
+//            }
+//            return;
+//        }
 
         boolean hit = opponent.getGrid().shoot(x, y);
         String status = "MANQUÉ";
@@ -69,6 +69,8 @@ public class Game {
 
     public void nextHumanTurn(int x, int y) {
         if (this.currentPlayer instanceof BotPlayer) return;
+//        int[] coords = player.getNextMove();
+//        executeShot(coords[0], coords[1]);
         executeShot(x, y);
 
         if (this.currentPlayer instanceof BotPlayer && !isGameEnded) {
@@ -77,7 +79,7 @@ public class Game {
     }
 
     public void nextCpuTurn() {
-        int[] coords = cpu.getNextMove();
+        int[] coords = cpu.getNextMove(player.getGrid());
         executeShot(coords[0], coords[1]);
     }
 

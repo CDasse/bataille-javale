@@ -15,7 +15,7 @@ public abstract class Player {
         this.ships = ShipFactory.createFleet();
     }
 
-    public abstract int[] getNextMove();
+    public abstract int[] getNextMove(Grid ennemyGrid);
 
     public Grid getGrid() {
         return this.grid;

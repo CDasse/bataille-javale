@@ -26,7 +26,7 @@ public class Main {
             System.out.println("\n--- RADAR ---");
             grilleDeMichel.display(!isGodMode);
 
-            int[] coordAtck = player.getNextMove();
+            int[] coordAtck = player.getNextMove(grilleDeMichel);
             partie.nextHumanTurn(coordAtck[0], coordAtck[1]);
         }
 

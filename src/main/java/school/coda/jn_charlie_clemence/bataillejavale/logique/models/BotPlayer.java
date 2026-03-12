@@ -10,7 +10,7 @@ public class BotPlayer extends Player {
     }
 
     @Override
-    public int[] getNextMove() {
+    public int[] getNextMove(Grid playerGrid) {
         Random rand = new Random();
 
         int maxX = this.getGrid().getWidth();
@@ -22,7 +22,7 @@ public class BotPlayer extends Player {
         do {
             targetedX = rand.nextInt(maxX);
             targetedY = rand.nextInt(maxY);
-        } while (getGrid().isCellAlreadyTargeted(targetedX, targetedY));
+        } while (playerGrid.isCellAlreadyTargeted(targetedX, targetedY));
 
         return new int[]{targetedX, targetedY};
     }

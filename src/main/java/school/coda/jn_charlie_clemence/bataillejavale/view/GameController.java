@@ -135,11 +135,12 @@ public class GameController {
     }
 
     private void playBotTurn() {
-        int[] botMove = botPlayer.getNextMove();
+        Grid playerGrid = humanPlayer.getGrid();
+        int[] botMove = botPlayer.getNextMove(playerGrid);
         int botX = botMove[0]; // col
         int botY = botMove[1]; // row
 
-        Grid playerGrid = humanPlayer.getGrid();
+
         boolean isHit = playerGrid.shoot(botX, botY);
 
         Rectangle attackedCell = humanCells[botY][botX];
