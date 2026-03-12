@@ -68,6 +68,7 @@ public class TUIController {
 
             if (humanResult == null){
                 view.displayErrorMessage("Case déjà visée! Choissisez une autre cible");
+                view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
             }
         }
         view.displayAttackResult(humanResult, human.getName());

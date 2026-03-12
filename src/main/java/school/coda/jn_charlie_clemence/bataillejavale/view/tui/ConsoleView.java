@@ -52,8 +52,6 @@ public class ConsoleView {
 
     private String getCellSymbol(Grid grid, int x, int y, boolean isRadar) {
         if (grid.isCellAlreadyTargeted(x, y)) {
-            // Ici on pourrait utiliser grid.getShipAt(x, y) != null
-            // Mais ta logique isCellEmpty est parfaite aussi
             return grid.isCellEmpty(x, y) ? "O " : "X ";
         } else if (!isRadar && !grid.isCellEmpty(x, y)) {
             return "S ";
@@ -74,7 +72,7 @@ public class ConsoleView {
                 System.out.print("--- COULÉ (" + result.shipHit().getName() + ") ---");
             }
         } else {
-            System.out.print("À l'eau...");
+            System.out.print("MANQUÉ ! ");
         }
         System.out.println();
     }
@@ -83,7 +81,7 @@ public class ConsoleView {
 
     public int[] askForCoordinates(int maxX, int maxY) {
         int x = askForInt("  > Colonne (0-" + maxX + ") : ", 0, maxX);
-        int y = askForChar("  > Ligne (A-...) : ", maxY);
+        int y = askForChar("  > Ligne", maxY);
         return new int[]{x, y};
     }
 
