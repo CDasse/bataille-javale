@@ -12,14 +12,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,11 +39,12 @@ public class PlacementFleetController {
 
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
-    private Grid grid;
-
     private EnumShip shipToPlace;
 
     private final List<Ship> playerFleet = ShipFactory.createFleet();
+
+    private HumanPlayer humanPlayer;
+    private BotPlayer botPlayer;
 
     @FXML
     private void addPorteAvions() {
@@ -80,16 +77,19 @@ public class PlacementFleetController {
     }
 
     @FXML
-    protected void initializeGridView() {
+    protected void initializePlayers() {
         int width = (int) widthSlider.getValue();
         int height = (int) heightSlider.getValue();
 
-        initializeGrid(height,width);
+        humanPlayer = new HumanPlayer("Capitain Nemo", width, height);
+
+        botPlayer = new BotPlayer("AI", width, height);
+
+        initializeGrid(humanPlayer.getGrid());
         welcomeText.setText("New grid generated !");
     }
 
-    private void initializeGrid(int height,int width) {
-        this.grid = new Grid(height, width);
+    private void initializeGrid(Grid grid) {
         this.gridPane.getChildren().clear();
 
         int rows = grid.getHeight();
@@ -158,7 +158,7 @@ public class PlacementFleetController {
             int targetC = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
 
             Rectangle voisin = getCellFromGrid(targetR, targetC);
-            if (voisin != null && grid.isCellEmpty(targetC, targetR)) {
+            if (voisin != null && humanPlayer.getGrid().isCellEmpty(targetC, targetR)) {
                 voisin.setFill(Color.LIGHTBLUE);
             }
         }
@@ -202,7 +202,7 @@ public class PlacementFleetController {
         Parent root = fxmlLoader.load();
 
         GameController gameController = fxmlLoader.getController();
-        gameController.initGameWithGrid(this.grid);
+        gameController.initGameWithGrid(humanPlayer, botPlayer);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 

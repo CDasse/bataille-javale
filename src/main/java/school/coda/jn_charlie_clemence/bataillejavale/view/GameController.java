@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 
+
 public class GameController {
     
     @FXML
@@ -45,14 +46,16 @@ public class GameController {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
     }
 
-    public void initGameWithGrid(Grid playerGrid) {
-        humanPlayer = new HumanPlayer("Capitain Nemo", playerGrid.getWidth(), playerGrid.getHeight());
+    public void initGameWithGrid(HumanPlayer humanPlayer, BotPlayer botPlayer) {
+        this.humanPlayer = humanPlayer;
+        this.botPlayer = botPlayer;
 
-        botPlayer = new BotPlayer("AI", playerGrid.getWidth(), playerGrid.getHeight());
         botPlayer.placeCpuShip();
 
-        humanCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
-        botCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
+        Grid playerGrid = humanPlayer.getGrid();
+
+        humanCells = new Rectangle[playerGrid.getHeight()][playerGrid.getWidth()];
+        botCells = new Rectangle[playerGrid.getHeight()][playerGrid.getWidth()];
 
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
