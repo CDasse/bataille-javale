@@ -7,12 +7,14 @@ public class Game {
     private final Player cpu;
     private Player currentPlayer;
     private boolean isGameEnded;
+    private int currentTurn;
 
     public Game(Player player, Player cpu) {
         this.player = player;
         this.cpu = cpu;
         this.currentPlayer = player;
         this.isGameEnded = false;
+        this.currentTurn = 1;
     }
 
     public boolean isGameOver() {
@@ -31,7 +33,7 @@ public class Game {
             this.isGameEnded = true;
         }
 
-        AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded);
+        AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded, this.currentTurn);
 
         if (!this.isGameEnded){
             this.currentPlayer = opponent;
@@ -49,8 +51,13 @@ public class Game {
 
     public AttackResult nextCpuTurn() {
         int[] coords = cpu.getNextMove(player.getGrid());
-        return executeShot(coords[0], coords[1]);
+
+        AttackResult result = executeShot(coords[0], coords[1]);
+
+        if (!this.isGameEnded) {
+            this.currentTurn++;
+        }
+
+        return result;
     }
-
-
 }
