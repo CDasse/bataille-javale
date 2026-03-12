@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class PlacementFleetController {
 
-    private final URL goutteSFX = getClass().getResource("/sounds/goutte.mp3");
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
     private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
 
     private void playPlacementSound() {
@@ -68,31 +68,35 @@ public class PlacementFleetController {
     @FXML
     private void addPorteAvions() {
         this.shipToPlace = EnumShip.PORTEAVIONS;
-        welcomeText.setText("Placement : Porte-Avions");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     private void addCuirasse() {
         this.shipToPlace = EnumShip.CUIRASSE;
-        welcomeText.setText("Placement : Cuirassé");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     private void addDestroyer() {
         this.shipToPlace = EnumShip.DESTROYER;
-        welcomeText.setText("Placement : Destroyer");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     public void addSousMarin() {
         this.shipToPlace = EnumShip.SOUSMARIN;
-        welcomeText.setText("Placement : Sous-marin");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     public void addPatrouilleur() {
         this.shipToPlace = EnumShip.PATROUILLEUR;
-        welcomeText.setText("Placement : Patrouilleur");
+        setTextPlacementShip(shipToPlace.name);
+    }
+
+    private void setTextPlacementShip(String name) {
+        welcomeText.setText("Placement : " + name);
     }
 
     @FXML

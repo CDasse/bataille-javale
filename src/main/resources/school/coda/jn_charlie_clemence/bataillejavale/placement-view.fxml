@@ -8,7 +8,7 @@
 <?import javafx.scene.control.Slider?>
 
 <?import javafx.scene.layout.HBox?>
-<VBox fx:id="scene" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.PlacementFleetController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -18,14 +18,14 @@
 
     <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
 
-    <Button text="Generate new grid" onAction="#initializePlayers"/>
+    <Button text="Générer une nouvelle grille" onAction="#initializePlayers"/>
 
     <HBox alignment="CENTER">
-        <Button text="5 cases" onAction="#addPorteAvions"/>
-        <Button text="4 cases" onAction="#addCuirasse"/>
-        <Button text="3 cases" onAction="#addDestroyer"/>
-        <Button text="3 cases" onAction="#addSousMarin"/>
-        <Button text="2 cases" onAction="#addPatrouilleur"/>
+        <Button text="Porte-avions (5 cases)" onAction="#addPorteAvions"/>
+        <Button text="Cuirassé (4 cases)" onAction="#addCuirasse"/>
+        <Button text="Destroyer (3 cases)" onAction="#addDestroyer"/>
+        <Button text="Sous-Marin (3 cases)" onAction="#addSousMarin"/>
+        <Button text="Patrouilleur (2 cases)" onAction="#addPatrouilleur"/>
     </HBox>
 
     <Label>Width of grid :</Label>
