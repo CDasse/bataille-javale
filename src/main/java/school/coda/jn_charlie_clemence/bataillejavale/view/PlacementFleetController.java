@@ -68,31 +68,35 @@ public class PlacementFleetController {
     @FXML
     private void addPorteAvions() {
         this.shipToPlace = EnumShip.PORTEAVIONS;
-        welcomeText.setText("Placement : Porte-Avions");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     private void addCuirasse() {
         this.shipToPlace = EnumShip.CUIRASSE;
-        welcomeText.setText("Placement : Cuirassé");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     private void addDestroyer() {
         this.shipToPlace = EnumShip.DESTROYER;
-        welcomeText.setText("Placement : Destroyer");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     public void addSousMarin() {
         this.shipToPlace = EnumShip.SOUSMARIN;
-        welcomeText.setText("Placement : Sous-marin");
+        setTextPlacementShip(shipToPlace.name);
     }
 
     @FXML
     public void addPatrouilleur() {
         this.shipToPlace = EnumShip.PATROUILLEUR;
-        welcomeText.setText("Placement : Patrouilleur");
+        setTextPlacementShip(shipToPlace.name);
+    }
+
+    private void setTextPlacementShip(String name) {
+        welcomeText.setText("Placement : " + name);
     }
 
     @FXML
@@ -124,78 +128,84 @@ public class PlacementFleetController {
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
-                final int r = row;
-                final int c = col;
-
                 casesCoordinates[row][col] = cell;
 
-                cell.setOnMouseEntered(_ -> {
-                    if (shipToPlace != null) {
-                        Ship ship = getShipToPlace(playerFleet);
-                        visualisationOnMouseEnter(grid, ship, r, c);
-                    }
-                });
+                setOnMouseEntered(grid, cell, row, col);
 
-                cell.setOnMouseExited(_ -> {
-                    if (shipToPlace != null) {
-                        Ship ship = getShipToPlace(playerFleet);
-                        if (ship != null) {
-                            hideVisualisationOnMouseExit(r, c, ship.getSize());
-                        }
-                    }
-                });
+                setOnMouseExited(cell, row, col);
 
-                cell.setOnMouseClicked(_ -> {
-                    if (shipToPlace != null) {
-                        Ship ship = getShipToPlace(playerFleet);
-                        assert ship != null;
-                        if (grid.canPlaceShip(ship, c, r, currentOrientation)) {
-                            grid.placeShip(ship, c, r, currentOrientation);
-                            fixShipToGrid(r, c, ship.getSize());
-                            updateFleetStatus(playerFleetStatusBox, ship);
-                            shipAlreadyPlaced.setText("");
-                            playPlacementSound();
-                        } else {
-                            shipAlreadyPlaced.setText("Bateau déja placé !");
-                            shipAlreadyPlaced.setTextFill(Color.RED);
-                        }
-                    }
-                });
+                setOnMouseClicked(grid, cell, col, row);
+
                 gridPane.add(cell, col, row);
             }
         }
         toggleOrientation();
     }
 
+    private void setOnMouseEntered(Grid grid, Rectangle cell, int r, int c) {
+        cell.setOnMouseEntered(_ -> {
+            if (shipToPlace != null) {
+                Ship ship = getShipToPlace(playerFleet);
+                visualisationOnMouseEnter(grid, ship, r, c);
+            }
+        });
+    }
+
+    private void setOnMouseExited(Rectangle cell, int r, int c) {
+        cell.setOnMouseExited(_ -> {
+            if (shipToPlace != null) {
+                Ship ship = getShipToPlace(playerFleet);
+                if (ship != null) {
+                    hideVisualisationOnMouseExit(r, c, ship.getSize());
+                }
+            }
+        });
+    }
+
+    private void setOnMouseClicked(Grid grid, Rectangle cell, int c, int r) {
+        cell.setOnMouseClicked(_ -> {
+            if (shipToPlace != null) {
+                Ship ship = getShipToPlace(playerFleet);
+                assert ship != null;
+                if (grid.canPlaceShip(ship, c, r, currentOrientation)) {
+                    grid.placeShip(ship, c, r, currentOrientation);
+                    fixShipToGrid(r, c, ship.getSize());
+                    updateFleetStatus(playerFleetStatusBox, ship);
+                    shipAlreadyPlaced.setText("");
+                    playPlacementSound();
+                } else {
+                    shipAlreadyPlaced.setText("Bateau déja placé !");
+                    shipAlreadyPlaced.setTextFill(Color.RED);
+                }
+            }
+        });
+    }
+
     private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
         boolean canPlace = grid.canPlaceShip(ship, col, row, currentOrientation);
 
         for (int i = 0; i < ship.getSize(); i++) {
-            Rectangle voisin = getTargetCell(row, col, i);
-            if (voisin != null) {
-                int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
-                int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+            int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
 
-                if (grid.isCellEmpty(targetCol, targetRow)) {
-                    voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
-                }
+            Rectangle voisin = getCellFromGrid(targetRow, targetCol);
+
+            if (voisin != null && grid.isCellEmpty(targetCol, targetRow)) {
+                voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
             }
         }
-
     }
 
     private void hideVisualisationOnMouseExit(int row, int col, int size) {
         for (int i = 0; i < size; i++) {
 
-            Rectangle voisin = getTargetCell(row, col, i);
+            int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
 
-            if (voisin != null) {
-                int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
-                int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+            Rectangle voisin = getCellFromGrid(targetRow, targetCol);
 
-                if (voisin != null && humanPlayer.getGrid().isCellEmpty(targetCol, targetRow)) {
-                    voisin.setFill(Color.LIGHTBLUE);
-                }
+            if (voisin != null && humanPlayer.getGrid().isCellEmpty(targetCol, targetRow)) {
+                voisin.setFill(Color.LIGHTBLUE);
             }
         }
     }
@@ -226,7 +236,11 @@ public class PlacementFleetController {
 
     private void fixShipToGrid(int row, int col, int size) {
         for (int i = 0; i < size; i++) {
-            Rectangle cell = getTargetCell(row, col, i);
+            int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
+            int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
+
+            Rectangle cell = getCellFromGrid(targetRow, targetCol);
+
             if (cell != null) cell.setFill(Color.DARKSLATEGRAY);
         }
     }
@@ -242,6 +256,7 @@ public class PlacementFleetController {
         if (humanPlayer.getGrid().getListShipsPlaced().size() < 5) {
             return;
         }
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
 
@@ -254,11 +269,5 @@ public class PlacementFleetController {
         stage.setTitle("Bataille Javal");
         stage.setScene(scene);
         stage.show();
-    }
-
-    private Rectangle getTargetCell(int startRow, int startCol, int index) {
-        int targetR = (currentOrientation == Orientation.HORIZONTAL) ? startRow : startRow + index;
-        int targetC = (currentOrientation == Orientation.HORIZONTAL) ? startCol + index : startCol;
-        return getCellFromGrid(targetR, targetC);
     }
 }
