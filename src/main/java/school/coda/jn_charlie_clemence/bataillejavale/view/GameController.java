@@ -43,22 +43,16 @@ public class GameController {
     @FXML
     public void initialize() {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
+    }
 
-        // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES + PLACEMENT FLOTTE
-        humanPlayer = new HumanPlayer("Capitain Nemo", 10, 10);
-        int ligne = 0;
-        for (Ship ship : humanPlayer.getShips()) {
-            humanPlayer.getGrid().placeShip(ship, 0, ligne, Orientation.HORIZONTAL);
-            ligne += 2;
-        }
+    public void initGameWithGrid(Grid playerGrid) {
+        humanPlayer = new HumanPlayer("Capitain Nemo", playerGrid.getWidth(), playerGrid.getHeight());
 
-        // TODO : METTRE A JOUR AVEC MEME LARGEUR ET HAUTEUR QUE JOUEUR HUMAIN
-        botPlayer = new BotPlayer("AI", 10, 10);
+        botPlayer = new BotPlayer("AI", playerGrid.getWidth(), playerGrid.getHeight());
         botPlayer.placeCpuShip();
 
-        // TODO : A INITIALISER AVEC LES HAUTEUR ET LARGEUR CHOISIES
-        humanCells = new Rectangle[10][10];
-        botCells = new Rectangle[10][10];
+        humanCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
+        botCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
 
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);

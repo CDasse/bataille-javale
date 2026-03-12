@@ -1,5 +1,8 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation.HORIZONTAL;
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation.VERTICAL;
 
@@ -7,6 +10,7 @@ public class Grid {
     private final Cell[][] cells;
     private final int width;
     private final int height;
+    private List<String> shipsAlreadyPlaced;
 
     public Grid(int height, int width) {
         this.cells = new Cell[height][width];
@@ -17,21 +21,27 @@ public class Grid {
         }
         this.width = width;
         this.height = height;
+        this.shipsAlreadyPlaced = new ArrayList<>(5);
     }
 
     public boolean placeShip(Ship ship, int x, int y, Orientation orientation) {
-        if (canPLaceShip(ship, x, y, orientation)) {
+        if (canPlaceShip(ship, x, y, orientation)) {
             for (int i = 0; i < ship.getSize(); i++) {
                 int currentX = (orientation == HORIZONTAL) ? x + i: x;
                 int currentY = (orientation == VERTICAL) ? y + i: y;
                 cells[currentY][currentX].setShip(ship);
             }
+            shipsAlreadyPlaced.add(ship.getName());
             return true;
         }
         return false;
     }
 
-    public boolean canPLaceShip(Ship ship, int x, int y, Orientation orientation) {
+    public boolean canPlaceShip(Ship ship, int x, int y, Orientation orientation) {
+        if (shipsAlreadyPlaced.contains(ship.getName())) {
+            return false;
+        }
+
         if (orientation == HORIZONTAL) {
             if (x < 0 || x + ship.getSize() > this.width) return false;
         } else {
