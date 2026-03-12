@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class PlacementFleetController {
 
-    private final URL goutteSFX = getClass().getResource("/sounds/goutte.mp3");
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
     private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
 
     private void playPlacementSound() {
