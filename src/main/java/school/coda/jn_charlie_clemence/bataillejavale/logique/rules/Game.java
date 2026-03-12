@@ -33,6 +33,13 @@ public class Game {
             opponent = this.player;
         }
 
+        if (opponent.getGrid().isCellAlreadyTargeted(x, y)) {
+            if (this.currentPlayer == player) {
+                System.out.println("Cible déjà visée, recommencez !");
+            }
+            return;
+        }
+
         boolean hit = opponent.getGrid().shoot(x, y);
         String status = "MANQUÉ";
 
