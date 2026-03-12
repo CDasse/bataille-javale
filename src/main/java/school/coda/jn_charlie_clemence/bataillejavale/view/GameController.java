@@ -105,17 +105,19 @@ public class GameController {
 
         Rectangle clickedCell = botCells[row][col];
 
+        char letterRow = (char) ('A' + row);
+
         if (result.hit()) {
             clickedCell.setFill(Color.RED);
             if (result.sunk()) {
                 logTextArea.appendText("BOUM ! Le " + result.shipHit().getName() + " ennemi a été COULÉ !\n");
                 updateFleetStatus(botPlayer, botFleetStatusBox);
             } else {
-                logTextArea.appendText("Navire ennemi TOUCHÉ en [" + col + "," + row + "] !\n");
+                logTextArea.appendText("Navire ennemi TOUCHÉ en [" + (col + 1) + "-" + letterRow + "] !\n");
             }
         } else {
             clickedCell.setFill(Color.DARKGRAY);
-            logTextArea.appendText("Tir à l'eau en [" + col + "," + row + "].\n");
+            logTextArea.appendText("Tir à l'eau en [" + (col + 1) + "-" + letterRow + "].\n");
         }
 
         if (result.GameOver()) {
@@ -134,17 +136,19 @@ public class GameController {
 
         Rectangle attackedCell = humanCells[result.y()][result.x()];
 
+        char letterRow = (char) ('A' + result.y());
+
         if (result.hit()) {
             attackedCell.setFill(Color.RED);
             if (result.sunk()) {
                 logTextArea.appendText("OUPS ! L'adversaire a COULÉ ton " + result.shipHit().getName() + " !\n");
                 updateFleetStatus(humanPlayer, playerFleetStatusBox);
             } else {
-                logTextArea.appendText("Alerte ! L'adversaire' a touché votre navire en [" + result.x() + "," + result.y() + "] !\n");
+                logTextArea.appendText("Alerte ! L'adversaire' a touché votre navire en [" + (result.x() + 1) + "-" + letterRow + "] !\n");
             }
         } else {
             attackedCell.setFill(Color.DARKGRAY);
-            logTextArea.appendText("L'adversaire a tiré à l'eau en [" + result.x() + "," + result.y() + "].\n");
+            logTextArea.appendText("L'adversaire a tiré à l'eau en [" + (result.x() + 1) + "-" + letterRow + "].\n");
         }
 
         if (result.GameOver()) {
