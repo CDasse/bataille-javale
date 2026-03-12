@@ -18,7 +18,7 @@
 
     <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
 
-    <Button text="Generate new grid" onAction="#initializeGridView"/>
+    <Button text="Generate new grid" onAction="#initializePlayers"/>
 
     <HBox alignment="CENTER">
         <Button text="5 cases" onAction="#addPorteAvions"/>

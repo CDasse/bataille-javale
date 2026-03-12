@@ -58,11 +58,12 @@ public class PlacementFleetController {
 
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
-    private Grid grid;
-
     private EnumShip shipToPlace;
 
     private final List<Ship> playerFleet = ShipFactory.createFleet();
+
+    private HumanPlayer humanPlayer;
+    private BotPlayer botPlayer;
 
     @FXML
     private void addPorteAvions() {
@@ -95,17 +96,20 @@ public class PlacementFleetController {
     }
 
     @FXML
-    protected void initializeGridView() {
+    protected void initializePlayers() {
         playerFleetStatusBox.getChildren().clear();
         int width = (int) widthSlider.getValue();
         int height = (int) heightSlider.getValue();
 
-        initializeGrid(height,width);
+        humanPlayer = new HumanPlayer("Capitain Nemo", width, height);
+
+        botPlayer = new BotPlayer("AI", width, height);
+
+        initializeGrid(humanPlayer.getGrid());
         welcomeText.setText("New grid generated !");
     }
 
-    private void initializeGrid(int height,int width) {
-        this.grid = new Grid(height, width);
+    private void initializeGrid(Grid grid) {
         this.gridPane.getChildren().clear();
 
         int rows = grid.getHeight();
@@ -182,13 +186,14 @@ public class PlacementFleetController {
 
     private void hideVisualisationOnMouseExit(int row, int col, int size) {
         for (int i = 0; i < size; i++) {
-            Rectangle voisin = getTargetCell(row, col, i); // Utilise ta méthode !
+
+            Rectangle voisin = getTargetCell(row, col, i);
 
             if (voisin != null) {
                 int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
                 int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
 
-                if (grid.isCellEmpty(targetCol, targetRow)) {
+                if (voisin != null && humanPlayer.getGrid().isCellEmpty(targetCol, targetRow)) {
                     voisin.setFill(Color.LIGHTBLUE);
                 }
             }
@@ -234,14 +239,14 @@ public class PlacementFleetController {
     }
 
     public void gameButton(ActionEvent event) throws IOException {
-        if (grid.getListShipsPlaced().size() < 5) {
+        if (humanPlayer.getGrid().getListShipsPlaced().size() < 5) {
             return;
         }
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
 
         GameController gameController = fxmlLoader.getController();
-        gameController.initGameWithGrid(this.grid);
+        gameController.initGameWithGrid(humanPlayer, botPlayer);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 

@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
+
 
 public class GameController {
     
@@ -37,22 +39,25 @@ public class GameController {
     private Rectangle[][] humanCells;
     private Rectangle[][] botCells;
 
-    private boolean isPlayerTurn = true;
-    private int gameTurn = 1;
+    private Game game;
     
     @FXML
     public void initialize() {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
     }
 
-    public void initGameWithGrid(Grid playerGrid) {
-        humanPlayer = new HumanPlayer("Capitain Nemo", playerGrid.getWidth(), playerGrid.getHeight());
+    public void initGameWithGrid(HumanPlayer humanPlayer, BotPlayer botPlayer) {
+        this.humanPlayer = humanPlayer;
+        this.botPlayer = botPlayer;
 
-        botPlayer = new BotPlayer("AI", playerGrid.getWidth(), playerGrid.getHeight());
+        game = new Game(humanPlayer, botPlayer);
+
         botPlayer.placeCpuShip();
 
-        humanCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
-        botCells = new Rectangle[playerGrid.getWidth()][playerGrid.getHeight()];
+        Grid playerGrid = humanPlayer.getGrid();
+
+        humanCells = new Rectangle[playerGrid.getHeight()][playerGrid.getWidth()];
+        botCells = new Rectangle[playerGrid.getHeight()][playerGrid.getWidth()];
 
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
@@ -92,25 +97,19 @@ public class GameController {
     }
 
     private void handlePlayerShot(int row, int col) {
-        if (!isPlayerTurn) return;
+        AttackResult result = game.nextHumanTurn(col, row);
 
-        Grid botGrid = botPlayer.getGrid();
-
-        if (botGrid.isCellAlreadyTargeted(col, row)) {
-            logTextArea.appendText("Vous avez déjà tiré sur ces coordonnées ! Rejouez\n");
+        if (result == null) {
             return;
         }
 
-        boolean isHit = botGrid.shoot(col, row);
-
         Rectangle clickedCell = botCells[row][col];
 
-        if (isHit) {
+        if (result.hit()) {
             clickedCell.setFill(Color.RED);
-            if (botGrid.allShipsSunk()) {
-                logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
-                isPlayerTurn = false;
-                return;
+            if (result.sunk()) {
+                logTextArea.appendText("BOUM ! Le " + result.shipHit().getName() + " ennemi a été COULÉ !\n");
+                updateFleetStatus(botPlayer, botFleetStatusBox);
             } else {
                 logTextArea.appendText("Navire ennemi TOUCHÉ en [" + col + "," + row + "] !\n");
             }
@@ -119,44 +118,41 @@ public class GameController {
             logTextArea.appendText("Tir à l'eau en [" + col + "," + row + "].\n");
         }
 
-        isPlayerTurn = false;
-        updateFleetStatus(botPlayer, botFleetStatusBox);
+        if (result.GameOver()) {
+            logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
+            return;
+        }
 
         turnLabel.setText("L'adversaire réfléchit...");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-        pause.setOnFinished(_ -> playBotTurn());
+        pause.setOnFinished(_ -> handleBotShot());
         pause.play();
     }
 
-    private void playBotTurn() {
-        Grid playerGrid = humanPlayer.getGrid();
-        int[] botMove = botPlayer.getNextMove(playerGrid);
-        int botX = botMove[0]; // col
-        int botY = botMove[1]; // row
+    private void handleBotShot() {
+        AttackResult result = game.nextCpuTurn();
 
+        Rectangle attackedCell = humanCells[result.y()][result.x()];
 
-        boolean isHit = playerGrid.shoot(botX, botY);
-
-        Rectangle attackedCell = humanCells[botY][botX];
-
-        if (isHit) {
+        if (result.hit()) {
             attackedCell.setFill(Color.RED);
-
-            if (playerGrid.allShipsSunk()) {
-                logTextArea.appendText("DÉFAITE... Notre flotte a été anéantie.\n");
-                return;
+            if (result.sunk()) {
+                logTextArea.appendText("OUPS ! L'adversaire a COULÉ ton " + result.shipHit().getName() + " !\n");
+                updateFleetStatus(humanPlayer, playerFleetStatusBox);
             } else {
-                logTextArea.appendText("Alerte ! Le Bot a touché notre navire en [" + botX + "," + botY + "] !\n");
+                logTextArea.appendText("Alerte ! L'adversaire' a touché votre navire en [" + result.x() + "," + result.y() + "] !\n");
             }
         } else {
             attackedCell.setFill(Color.DARKGRAY);
-            logTextArea.appendText("Le Bot a tiré à l'eau en [" + botX + "," + botY + "].\n");
+            logTextArea.appendText("L'adversaire a tiré à l'eau en [" + result.x() + "," + result.y() + "].\n");
         }
 
-        isPlayerTurn = true;
-        gameTurn++;
-        updateFleetStatus(humanPlayer, playerFleetStatusBox);
-        turnLabel.setText("Tour " + gameTurn);
+        if (result.GameOver()) {
+            logTextArea.appendText("DÉFAITE... Votre flotte a été anéantie.\n");
+            return;
+        }
+
+        turnLabel.setText("Tour " + result.currentTurn());
     }
 
     private void updateFleetStatus(Player player, VBox statusBox) {
