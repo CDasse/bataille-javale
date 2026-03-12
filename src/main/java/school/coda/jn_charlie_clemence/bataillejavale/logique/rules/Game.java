@@ -1,9 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.rules;
 
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.BotPlayer;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.HumanPlayer;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Player;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 
 public class Game {
     private final Player player;
@@ -22,65 +19,36 @@ public class Game {
         return (player.getGrid().allShipsSunk()) || (cpu.getGrid().allShipsSunk());
     }
 
-    private void executeShot(int x, int y) {
-        Player opponent;
+    private AttackResult executeShot(int x, int y) {
+        if (this.isGameEnded) return null;
 
-        if (this.isGameEnded) return;
-
-        if (this.currentPlayer == player) {
-            opponent = this.cpu;
-        } else {
-            opponent = this.player;
-        }
-
-//        if (opponent.getGrid().isCellAlreadyTargeted(x, y)) {
-//            if (this.currentPlayer == player) {
-//                System.out.println("Cible déjà visée, recommencez !");
-//            }
-//            return;
-//        }
-
+        Player opponent = (this.currentPlayer == player) ? cpu : player;
         boolean hit = opponent.getGrid().shoot(x, y);
-        String status = "MANQUÉ";
-
-        if (hit) {
-            status = "TOUCHÉ";
-
-            Ship shipHit = opponent.getGrid().getShipAt(x, y);
-
-            if (shipHit != null && shipHit.isSunk()) {
-                status = "COULÉ (" + shipHit.getName() + ")";
-            }
-        }
-
-        if (this.currentPlayer == player){
-            System.out.println("Vous attaquez en LIGNE : " + y + " et COLONNE : " + x + ".  ////////   " + status);
-        } else {
-            System.out.println(currentPlayer.getName() + " vous attaque en LIGNE : " + y + " et COLONNE : " + x + ".  ////////   " + status);
-        }
-
+        Ship shipHit = opponent.getGrid().getShipAt(x, y);
+        boolean sunk = (shipHit != null && shipHit.isSunk());
 
         if (isGameOver()) {
             this.isGameEnded = true;
-        } else {
+        }
+
+        AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded);
+
+        if (!this.isGameEnded){
             this.currentPlayer = opponent;
         }
+
+        return result;
     }
 
-    public void nextHumanTurn(int x, int y) {
-        if (this.currentPlayer instanceof BotPlayer) return;
-//        int[] coords = player.getNextMove();
-//        executeShot(coords[0], coords[1]);
-        executeShot(x, y);
+    public AttackResult nextHumanTurn(int x, int y) {
+        if (this.currentPlayer instanceof BotPlayer) return null;
+        return  executeShot(x, y);
 
-        if (this.currentPlayer instanceof BotPlayer && !isGameEnded) {
-            nextCpuTurn();
-        }
     }
 
-    public void nextCpuTurn() {
+    public AttackResult nextCpuTurn() {
         int[] coords = cpu.getNextMove(player.getGrid());
-        executeShot(coords[0], coords[1]);
+        return executeShot(coords[0], coords[1]);
     }
 
 
