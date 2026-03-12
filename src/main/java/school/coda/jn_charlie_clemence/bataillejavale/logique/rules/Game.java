@@ -42,6 +42,7 @@ public class Game {
 
     public AttackResult nextHumanTurn(int x, int y) {
         if (this.currentPlayer instanceof BotPlayer) return null;
+        if (cpu.getGrid().isCellAlreadyTargeted(x, y)) return null;
         return  executeShot(x, y);
 
     }

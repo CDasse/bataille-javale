@@ -58,7 +58,7 @@ public class TUIController {
         AttackResult humanResult = null;
 
         view.displayGrid(human.getGrid(), "--- MA FLOTTE ---", false);
-        view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
+        view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
 
         view.displayMessage("=== PHASE DE TIR ===");
 
