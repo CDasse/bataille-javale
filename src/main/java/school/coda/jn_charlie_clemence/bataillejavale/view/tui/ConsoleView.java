@@ -1,57 +1,93 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view.tui;
 
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.AttackResult;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
 
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForChar.askForChar;
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForInt.askForInt;
+import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForOrientation.askForOrientation;
 
 public class ConsoleView {
 
-    public void displayPlacementMessage(String shipName, int shipSize) {
-        System.out.println("\nPlacement du navire : " + shipName + " (Taille: " + shipSize + ")");
+    // --- AFFICHAGE GÉNÉRAL ---
+
+    public void displayMessage(String message) {
+        System.out.println(message);
     }
 
     public void displayErrorMessage(String message) {
-        System.err.println("ERREUR : " + message);
+        System.err.println("\n [!] " + message);
     }
 
-    public int[] askForCoordinates(int maxX, int maxY) {
-        int x = askForInt("Colonne (axe X) : ", 0, maxX);
-        int y = askForChar("Ligne (axe Y) : ", maxY);
-        return new int[]{x, y};
+    public void displayPlacementHeader(String shipName, int shipSize) {
+        System.out.println("\n-------------------------------------------");
+        System.out.println(" Placement : " + shipName + " (Taille : " + shipSize + ")");
+        System.out.println("-------------------------------------------");
     }
 
-    public void displayGrid(Grid grid, boolean isRadar) {
-        // 1. Affichage de l'en-tête (les chiffres)
+    // --- AFFICHAGE DES GRILLES ---
+
+    public void displayGrid(Grid grid, String label, boolean isRadar) {
+        System.out.println("\n" + label.toUpperCase());
+
+        // 1. En-tête (Chiffres)
         System.out.print("   ");
         for (int i = 0; i < grid.getWidth(); i++) {
             System.out.print(i + " ");
         }
-        System.out.println("");
+        System.out.println();
 
-        // 2. Affichage des lignes
+        // 2. Lignes (Lettre + Symboles)
         for (int row = 0; row < grid.getHeight(); row++) {
-            // Lettres (A, B, C...)
             char letter = (char) ('A' + row);
             System.out.print(letter + "  ");
 
             for (int col = 0; col < grid.getWidth(); col++) {
-                // On demande l'état de la case à la grille
-                // Note : Tu auras besoin d'une méthode dans Grid ou Cell
-                // pour savoir si c'est touché/occupé sans briser l'encapsulation
-                String symbol = getCellSymbol(grid, col, row, isRadar);
-                System.out.print(symbol);
+                System.out.print(getCellSymbol(grid, col, row, isRadar));
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 
     private String getCellSymbol(Grid grid, int x, int y, boolean isRadar) {
         if (grid.isCellAlreadyTargeted(x, y)) {
+            // Ici on pourrait utiliser grid.getShipAt(x, y) != null
+            // Mais ta logique isCellEmpty est parfaite aussi
             return grid.isCellEmpty(x, y) ? "O " : "X ";
         } else if (!isRadar && !grid.isCellEmpty(x, y)) {
             return "S ";
         }
         return "~ ";
+    }
+
+    // --- GESTION DES RÉSULTATS ---
+
+    public void displayAttackResult(AttackResult result, String playerName) {
+        if (result == null) return;
+
+        System.out.print("\n[" + playerName + "] tire en " + (char)('A' + result.y()) + result.x() + " : ");
+
+        if (result.hit()) {
+            System.out.print("TOUCHÉ ! ");
+            if (result.sunk()) {
+                System.out.print("--- COULÉ (" + result.shipHit().getName() + ") ---");
+            }
+        } else {
+            System.out.print("À l'eau...");
+        }
+        System.out.println();
+    }
+
+    // --- SAISIES UTILISATEUR ---
+
+    public int[] askForCoordinates(int maxX, int maxY) {
+        int x = askForInt("  > Colonne (0-" + maxX + ") : ", 0, maxX);
+        int y = askForChar("  > Ligne (A-...) : ", maxY);
+        return new int[]{x, y};
+    }
+
+    public Orientation askForShipOrientation() {
+        return askForOrientation();
     }
 }
