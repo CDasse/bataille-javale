@@ -75,7 +75,7 @@ public class TUIController {
 
         if (!game.isGameOver()) {
             view.displayMessage("\nTour de l'adversaire...");
-            try { Thread.sleep(1500); } catch (InterruptedException e) {};
+            try { Thread.sleep(1500); } catch (InterruptedException _) {};
             AttackResult cpuResult = game.nextCpuTurn();
             view.displayAttackResult(cpuResult, cpu.getName());
         }

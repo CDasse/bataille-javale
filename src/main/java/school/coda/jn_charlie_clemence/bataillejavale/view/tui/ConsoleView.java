@@ -34,7 +34,7 @@ public class ConsoleView {
         // 1. En-tête (Chiffres)
         System.out.print("   ");
         for (int i = 0; i < grid.getWidth(); i++) {
-            System.out.printf(i + " ");
+            System.out.printf("%2d  ", i);
         }
         System.out.println();
 
@@ -56,7 +56,7 @@ public class ConsoleView {
         } else if (!isRadar && !grid.isCellEmpty(x, y)) {
             return "S ";
         }
-        return "~ ";
+        return " ~  ";
     }
 
     // --- GESTION DES RÉSULTATS ---
