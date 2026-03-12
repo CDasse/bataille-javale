@@ -19,6 +19,7 @@ import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,6 +68,18 @@ public class PlacementFleetController {
     }
 
     @FXML
+    public void addSousMarin() {
+        this.shipToPlace = EnumShip.SOUSMARIN;
+        welcomeText.setText("Placement : Sous-marin");
+    }
+
+    @FXML
+    public void addPatrouilleur() {
+        this.shipToPlace = EnumShip.PATROUILLEUR;
+        welcomeText.setText("Placement : Patrouilleur");
+    }
+
+    @FXML
     protected void initializeGridView() {
         int width = (int) widthSlider.getValue();
         int height = (int) heightSlider.getValue();
@@ -106,14 +119,17 @@ public class PlacementFleetController {
                 cell.setOnMouseExited(_ -> {
                     if (shipToPlace != null) {
                         Ship ship = getShipToPlace(playerFleet);
-                        hideVisualisationOnMouseExit(r, c, ship.getSize());
+                        if (ship != null) {
+                            hideVisualisationOnMouseExit(r, c, ship.getSize());
+                        }
                     }
                 });
 
                 cell.setOnMouseClicked(_ -> {
                     if (shipToPlace != null) {
                         Ship ship = getShipToPlace(playerFleet);
-                        if (grid.canPLaceShip(ship, c, r, currentOrientation)) {
+                        assert ship != null;
+                        if (grid.canPlaceShip(ship, c, r, currentOrientation)) {
                             grid.placeShip(ship, c, r, currentOrientation);
                             fixShipToGrid(r, c, ship.getSize());
                         }
@@ -126,11 +142,13 @@ public class PlacementFleetController {
     }
 
     private void visualisationOnMouseEnter(Grid grid, Ship ship, int row, int col) {
-        boolean canPlace = grid.canPLaceShip(ship, col, row, currentOrientation);
+        boolean canPlace = grid.canPlaceShip(ship, col, row, currentOrientation);
 
         for (int i = 0; i < ship.getSize(); i++) {
             Rectangle voisin = getTargetCell(row, col, i);
-            voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
+            if (voisin != null) {
+                voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
+            }
         }
     }
 
@@ -182,6 +200,9 @@ public class PlacementFleetController {
     public void gameButton(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
+
+        GameController gameController = fxmlLoader.getController();
+        gameController.initGameWithGrid(this.grid);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
