@@ -1,5 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -7,10 +8,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
-
-import java.util.List;
 
 public class GameController {
     
@@ -18,41 +17,37 @@ public class GameController {
     private Label turnLabel;
 
     @FXML
-    private GridPane botGridPane;
-
-    @FXML
     private GridPane playerGridPane;
-    
-    @FXML
-    private TextArea logTextArea;
 
     @FXML
     private VBox playerFleetStatusBox;
 
     @FXML
+    private GridPane botGridPane;
+
+    @FXML
     private VBox botFleetStatusBox;
+
+    @FXML
+    private TextArea logTextArea;
 
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
 
-    Rectangle[][] humanCells;
-    Rectangle[][] botCells;
-
+    private Rectangle[][] humanCells;
+    private Rectangle[][] botCells;
 
     private boolean isPlayerTurn = true;
-
     private int gameTurn = 1;
     
     @FXML
     public void initialize() {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
 
-        // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES
+        // TODO : METTRE A JOUR AVEC LARGEUR ET HAUTEUR CHOISIES + PLACEMENT FLOTTE
         humanPlayer = new HumanPlayer("Capitain Nemo", 10, 10);
-        List<Ship> playerFleet = ShipFactory.createFleet();
-        IO.println(playerFleet);
         int ligne = 0;
-        for (Ship ship : playerFleet) {
+        for (Ship ship : humanPlayer.getShips()) {
             humanPlayer.getGrid().placeShip(ship, 0, ligne, Orientation.HORIZONTAL);
             ligne += 2;
         }
@@ -67,6 +62,9 @@ public class GameController {
 
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
+
+        updateFleetStatus(humanPlayer, playerFleetStatusBox);
+        updateFleetStatus(botPlayer, botFleetStatusBox);
     }
 
     private void drawGrid(GridPane playerGridPane, Grid grid, boolean isClickable, Rectangle[][] cellArray) {
@@ -115,7 +113,6 @@ public class GameController {
 
         if (isHit) {
             clickedCell.setFill(Color.RED);
-
             if (botGrid.allShipsSunk()) {
                 logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
                 isPlayerTurn = false;
@@ -129,8 +126,12 @@ public class GameController {
         }
 
         isPlayerTurn = false;
-        updateFleetStatus(humanPlayer, playerFleetStatusBox);
-        playBotTurn();
+        updateFleetStatus(botPlayer, botFleetStatusBox);
+
+        turnLabel.setText("L'adversaire réfléchit...");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.setOnFinished(_ -> playBotTurn());
+        pause.play();
     }
 
     private void playBotTurn() {
@@ -159,27 +160,25 @@ public class GameController {
 
         isPlayerTurn = true;
         gameTurn++;
-        updateFleetStatus(botPlayer, botFleetStatusBox);
+        updateFleetStatus(humanPlayer, playerFleetStatusBox);
         turnLabel.setText("Tour " + gameTurn);
     }
 
     private void updateFleetStatus(Player player, VBox statusBox) {
-
         statusBox.getChildren().clear();
 
         for (Ship ship : player.getShips()) {
-            String status;
-
             if (ship.isSunk()) {
-                status = "COULÉ ☠️";
-            } else if (ship.isTouched()) {
-                status = "Endommagé ⚠\uFE0F";
-            } else {
-                status = "Intact 🟢";
+                Label statusLabel = new Label(ship.getName() + " - COULÉ ☠️");
+                statusLabel.setTextFill(Color.DARKRED);
+                statusBox.getChildren().add(statusLabel);
             }
+        }
 
-            Label statusLabel = new Label(ship.getName() + " - " + status);
-            statusBox.getChildren().add(statusLabel);
+        if (statusBox.getChildren().isEmpty()) {
+            Label allSafeLabel = new Label("Tous les navires sont à flot.");
+            allSafeLabel.setTextFill(Color.GRAY);
+            statusBox.getChildren().add(allSafeLabel);
         }
     }
 }
