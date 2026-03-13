@@ -5,6 +5,10 @@ import javafx.scene.layout.GridPane;
 
 public class CoordinateUtils {
 
+    private CoordinateUtils() {
+        throw new UnsupportedOperationException("Cette classe utilitaire ne doit pas être instanciée.");
+    }
+
     public static void showNameOfGridCols(int cols, GridPane playerGridPane) {
         for (int col = 0; col < cols; col++) {
             Label colLabel = new Label(String.valueOf(col + 1));

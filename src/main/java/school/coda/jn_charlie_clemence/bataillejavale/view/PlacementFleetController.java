@@ -26,6 +26,23 @@ import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.Coordina
 
 public class PlacementFleetController {
 
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
+    private final URL explosionSFX = getClass().getResource("/sounds/explosion.wav");
+    private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+    private final AudioClip shipDownSound = (explosionSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
+
+    private void playShipDownSound() {
+        if (shipDownSound != null) {
+            shipDownSound.play();
+        }
+    }
+
     @FXML
     private GridPane gridPane;
 
@@ -55,9 +72,6 @@ public class PlacementFleetController {
 
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
-
-    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
-    private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
 
     @FXML
     private void addPorteAvions() {
@@ -269,7 +283,7 @@ public class PlacementFleetController {
             return;
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
 
         GameController gameController = fxmlLoader.getController();
@@ -278,7 +292,7 @@ public class PlacementFleetController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         Scene scene = new Scene(root, 1080, 720);
-        stage.setTitle("Bataille Javal");
+        stage.setTitle("Bataille Javal - Jeu");
         stage.setScene(scene);
         stage.show();
     }

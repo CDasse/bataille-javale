@@ -12,13 +12,13 @@ import java.io.IOException;
 public class AccueilController {
 
     public void playButton(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/placement-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/placement-view.fxml"));
         Parent root = fxmlLoader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         Scene scene = new Scene(root, 1080, 720);
-        stage.setTitle("Bataille Javal");
+        stage.setTitle("Bataille Javal - Placement de la flotte");
         stage.setScene(scene);
         stage.show();
     }

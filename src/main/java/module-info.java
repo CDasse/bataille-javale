@@ -9,4 +9,5 @@ module school.coda.jn_charlie_clemence.bataillejavale {
     opens school.coda.jn_charlie_clemence.bataillejavale.view to javafx.fxml;
     exports school.coda.jn_charlie_clemence.bataillejavale.view;
     exports school.coda.jn_charlie_clemence.bataillejavale.logique.models;
+    exports school.coda.jn_charlie_clemence.bataillejavale.view.utils;
 }
