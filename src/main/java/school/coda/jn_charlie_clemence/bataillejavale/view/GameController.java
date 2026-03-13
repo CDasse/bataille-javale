@@ -33,6 +33,9 @@ public class GameController {
     private Label turnLabel;
 
     @FXML
+    private Label delayBot;
+
+    @FXML
     private TextArea logTextArea;
 
     private final Map<Ship, Label> humanShipLabels = new HashMap<>();
@@ -126,9 +129,13 @@ public class GameController {
             return;
         }
 
-        turnLabel.setText("L'adversaire réfléchit...");
+        delayBot.setText("L'adversaire réfléchit...");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-        pause.setOnFinished(_ -> handleBotShot());
+        pause.setOnFinished(_ -> {
+            handleBotShot();
+            delayBot.setText("");
+                }
+        );
         pause.play();
     }
 
@@ -157,7 +164,7 @@ public class GameController {
             return;
         }
 
-        turnLabel.setText("Tour " + result.currentTurn());
+        turnLabel.setText("Tour " + game.getCurrentTurn());
     }
 
     private void initFleetStatus(Player player, VBox statusBox, Map<Ship, Label> labelsMap) {
