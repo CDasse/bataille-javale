@@ -284,7 +284,7 @@ public class GameController {
 
         Stage stage = (Stage) playerGridPane.getScene().getWindow();
 
-        Scene scene = new Scene(root, 1080, 720);
+        Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Bataille Javal - Fin de partie");
         stage.setScene(scene);
         stage.show();

@@ -38,7 +38,7 @@ public class EndGameController {
 
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 
-            Scene scene = new Scene(root, 1080, 720);
+            Scene scene = new Scene(root, 1600, 900);
 
             stage.setTitle("Bataille Javal - Accueil");
             stage.setScene(scene);
