@@ -12,6 +12,7 @@ public class BotPlayer extends Player {
 
     @Override
     public int[] getNextMove(Grid playerGrid) {
+        // verifying the stack, if the cell is already targeted pop the last element inserted, if no return the pop element as the coordinates to target
         while (!nextTargets.empty()){
             int[] potentialTarget = nextTargets.peek();
             if (playerGrid.isCellAlreadyTargeted(potentialTarget[0], potentialTarget[1])) {
@@ -20,7 +21,6 @@ public class BotPlayer extends Player {
                 return nextTargets.pop();
             }
         }
-//        isHunting = false;
 
         Random rand = new Random();
 
@@ -39,7 +39,7 @@ public class BotPlayer extends Player {
 
         return new int[]{targetedX, targetedY};
     }
-
+    // method for improving the cpu behavior, when he hit a cell with a ship in it, he will target the possible adjacent cell
     public void recordResult (AttackResult result, Grid playerGrid){
         if (!result.hit()){
             return;
@@ -80,6 +80,7 @@ public class BotPlayer extends Player {
         }
     }
 
+    // clearing the cpu memory for new game
     public void resetStrategy (){
         this.nextTargets.clear();
     }

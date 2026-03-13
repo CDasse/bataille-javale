@@ -9,9 +9,6 @@ import static school.coda.jn_charlie_clemence.bataillejavale.tui.utils.AskForInt
 import static school.coda.jn_charlie_clemence.bataillejavale.tui.utils.AskForOrientation.askForOrientation;
 
 public class ConsoleView {
-
-    // --- AFFICHAGE GÉNÉRAL ---
-
     public void displayMessage(String message) {
         System.out.println(message);
     }
@@ -26,19 +23,17 @@ public class ConsoleView {
         System.out.println("-------------------------------------------");
     }
 
-    // --- AFFICHAGE DES GRILLES ---
-
     public void displayGrid(Grid grid, String label, boolean isRadar) {
         System.out.println("\n" + label.toUpperCase());
 
-        // 1. En-tête (Chiffres)
+        // 1. Columns (digits)
         System.out.print("   ");
         for (int i = 0; i < grid.getWidth(); i++) {
             System.out.printf("%2d  ", i + 1);
         }
         System.out.println();
 
-        // 2. Lignes (Lettre + Symboles)
+        // Rows (Letters + Symboles)
         for (int row = 0; row < grid.getHeight(); row++) {
             char letter = (char) ('A' + row);
             System.out.print(letter + "  ");
@@ -59,8 +54,6 @@ public class ConsoleView {
         return " ~  ";
     }
 
-    // --- GESTION DES RÉSULTATS ---
-
     public void displayAttackResult(AttackResult result, String playerName) {
         if (result == null) return;
 
@@ -76,8 +69,6 @@ public class ConsoleView {
         }
         System.out.println();
     }
-
-    // --- SAISIES UTILISATEUR ---
 
     public int[] askForCoordinates(int maxX, int maxY) {
         int x = askForInt("  > Colonne (1-" + (maxX + 1) + ") : ", 0, maxX)-1;
