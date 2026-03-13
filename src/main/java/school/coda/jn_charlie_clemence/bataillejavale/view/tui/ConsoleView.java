@@ -52,9 +52,9 @@ public class ConsoleView {
 
     private String getCellSymbol(Grid grid, int x, int y, boolean isRadar) {
         if (grid.isCellAlreadyTargeted(x, y)) {
-            return grid.isCellEmpty(x, y) ? "O " : "X ";
+            return grid.isCellEmpty(x, y) ? " O  " : " X  ";
         } else if (!isRadar && !grid.isCellEmpty(x, y)) {
-            return "S ";
+            return " S  ";
         }
         return " ~  ";
     }
