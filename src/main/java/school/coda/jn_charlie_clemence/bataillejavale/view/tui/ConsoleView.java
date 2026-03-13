@@ -34,7 +34,7 @@ public class ConsoleView {
         // 1. En-tête (Chiffres)
         System.out.print("   ");
         for (int i = 0; i < grid.getWidth(); i++) {
-            System.out.printf("%2d  ", i);
+            System.out.printf("%2d  ", i + 1);
         }
         System.out.println();
 
@@ -80,7 +80,7 @@ public class ConsoleView {
     // --- SAISIES UTILISATEUR ---
 
     public int[] askForCoordinates(int maxX, int maxY) {
-        int x = askForInt("  > Colonne (0-" + maxX + ") : ", 0, maxX);
+        int x = askForInt("  > Colonne (1-" + (maxX + 1) + ") : ", 0, maxX)-1;
         int y = askForChar("  > Ligne", maxY);
         return new int[]{x, y};
     }
@@ -110,5 +110,27 @@ public class ConsoleView {
         System.out.println("\nAppuyez sur [ENTRÉE] pour revenir au menu...");
 
         IO.readln();
+    }
+
+    public int askGridSize(String dimension){
+        int size = 0;
+        boolean isValid = false;
+
+        while (!isValid){
+            System.out.print("Renseignez la " + dimension + " de la grille (entre 8 er 15) : ");
+            String input = IO.readln();
+
+            try{
+                size = Integer.parseInt(input);
+                if (size >= 8 && size <= 15){
+                    isValid = true;
+                } else {
+                    System.out.println("Taille hors spectre, veuillez choisir une valeur entre 8 et 15");
+                }
+            } catch (NumberFormatException e){
+                System.out.println(" Ce n'est pas un nombre, veuillez recommancer!");
+            }
+        }
+        return size;
     }
 }

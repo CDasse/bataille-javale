@@ -12,11 +12,11 @@ import javax.swing.text.View;
 
 public class Main {
     public static void main(String[] args) {
-        Player human = new HumanPlayer("JN", 13, 13);
-        BotPlayer cpu = new BotPlayer("ORDINATEUR", 13, 13);
-
-        Game game = new Game(human, cpu);
         ConsoleView view = new ConsoleView();
+        Player human = new HumanPlayer("JOUEUR", 10, 10);
+        BotPlayer cpu = new BotPlayer("ORDINATEUR", 10, 10);
+        Game game = new Game(human, cpu);
+
 
         TUIController tui = new TUIController(view, game, human, cpu);
 

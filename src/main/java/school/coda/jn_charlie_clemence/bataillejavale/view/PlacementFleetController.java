@@ -259,7 +259,7 @@ public class PlacementFleetController {
             return;
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/game-view.fxml"));
         Parent root = fxmlLoader.load();
 
         GameController gameController = fxmlLoader.getController();

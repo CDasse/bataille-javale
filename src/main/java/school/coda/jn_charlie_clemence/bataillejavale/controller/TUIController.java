@@ -40,13 +40,14 @@ public class TUIController {
     }
 
     public void play(){
-        human.getGrid().resetGrid();
-        cpu.getGrid().resetGrid();
-
-        for (Ship ship : human.getShips()) ship.reset();
-        for (Ship ship : cpu.getShips()) ship.reset();
-
         cpu.resetStrategy();
+
+        int newWidth = view.askGridSize("largeur");
+        int newHeight = view.askGridSize("hauteur");
+
+        this.human = new HumanPlayer(human.getName(), newWidth, newHeight);
+        this.cpu = new BotPlayer(cpu.getName(), newWidth, newHeight);
+        this.game = new Game(human, cpu);
 
         setupStage();
 
