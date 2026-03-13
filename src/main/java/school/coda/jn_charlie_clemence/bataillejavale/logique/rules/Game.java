@@ -33,7 +33,7 @@ public class Game {
             this.isGameEnded = true;
         }
 
-        AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded, this.currentTurn);
+        AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded);
 
         if (!this.isGameEnded){
             this.currentPlayer = opponent;
@@ -59,5 +59,9 @@ public class Game {
         }
 
         return result;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
     }
 }
