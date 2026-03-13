@@ -12,16 +12,6 @@
 
     <Label fx:id="gameResult" alignment="CENTER" />
 
-    <VBox spacing="10.0" alignment="CENTER">
-        <Label style="-fx-font-weight: bold;" text="État de la flotte de votre adversaire :"/>
-        <VBox fx:id="botFleetStatusBox" alignment="CENTER" spacing="5.0"/>
-    </VBox>
-
-    <VBox spacing="10.0" alignment="CENTER">
-        <Label style="-fx-font-weight: bold;" text="État de votre flotte :"/>
-        <VBox fx:id="humanFleetStatusBox" alignment="CENTER" spacing="5.0"/>
-    </VBox>
-
     <Label fx:id="nbOfTurn" alignment="CENTER" />
 
     <Button onAction="#goBackToHomePage" text="Retourner à l'accueil" />

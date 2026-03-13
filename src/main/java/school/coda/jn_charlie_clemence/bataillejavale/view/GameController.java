@@ -208,6 +208,8 @@ public class GameController {
     private void handleBotShot() {
         AttackResult result = game.nextCpuTurn();
 
+        botPlayer.recordResult(result, humanPlayer.getGrid());
+
         Rectangle attackedCell = humanCells[result.y()][result.x()];
 
         char letterRow = (char) ('A' + result.y());
@@ -252,10 +254,25 @@ public class GameController {
     }
 
     private void markShipAsSunk(AttackResult result, Map<Ship, Label> labelsMap) {
-        Label labelToUpdate = labelsMap.get(result.shipHit());
+        Ship hitShip = result.shipHit();
+        if (hitShip == null) return;
 
-        labelToUpdate.setText(result.shipHit().getName() + "- COULÉ ☠️");
-        labelToUpdate.setTextFill(Color.DARKRED);
+        Label labelToUpdate = labelsMap.get(hitShip);
+
+        // make a search by name if didn't find the first time
+        if (labelToUpdate == null) {
+            for (Map.Entry<Ship, Label> entry : labelsMap.entrySet()) {
+                if (entry.getKey().getName().equals(hitShip.getName())) {
+                    labelToUpdate = entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (labelToUpdate != null) {
+            labelToUpdate.setText(hitShip.getName() + " - COULÉ ☠️");
+            labelToUpdate.setTextFill(Color.DARKRED);
+        }
     }
 
     private void endGameView(int currentTurn, Winner winner) throws IOException{
@@ -263,7 +280,7 @@ public class GameController {
         Parent root = fxmlLoader.load();
 
         EndGameController endGameController = fxmlLoader.getController();
-        endGameController.endGameView(currentTurn, winner, humanPlayer.getShips(), botPlayer.getShips());
+        endGameController.endGameView(currentTurn, winner);
 
         Stage stage = (Stage) playerGridPane.getScene().getWindow();
 

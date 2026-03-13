@@ -26,6 +26,15 @@ import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.Coordina
 
 public class PlacementFleetController {
 
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
+    private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
+
     @FXML
     private GridPane gridPane;
 
@@ -175,6 +184,7 @@ public class PlacementFleetController {
                     placeShipToGrid(r, c, ship.getSize());
                     updateFleetStatus(playerFleetStatusBox, ship);
                     shipAlreadyPlaced.setText("");
+                    playPlacementSound();
                 } else {
                     shipAlreadyPlaced.setText("Bateau déja placé !");
                     shipAlreadyPlaced.setTextFill(Color.RED);
