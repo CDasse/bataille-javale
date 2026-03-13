@@ -152,15 +152,15 @@ public class GameController {
             return;
         }
 
-//        delayBot.setText("L'adversaire réfléchit...");
-//        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-//        pause.setOnFinished(_ -> {
-//            handleBotShot();
-//            delayBot.setText("");
-//                }
-//        );
-//        pause.play();
-        handleBotShot();
+        delayBot.setText("L'adversaire réfléchit...");
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.setOnFinished(_ -> {
+            handleBotShot();
+            delayBot.setText("");
+                }
+        );
+        pause.play();
+
     }
 
     private void handleBotShot() {
