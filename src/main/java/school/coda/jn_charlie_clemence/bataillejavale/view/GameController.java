@@ -2,17 +2,24 @@ package school.coda.jn_charlie_clemence.bataillejavale.view;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
+import school.coda.jn_charlie_clemence.bataillejavale.view.utils.Winner;
+
 import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +48,9 @@ public class GameController {
     @FXML
     private TextArea logTextArea;
 
+    private HumanPlayer humanPlayer;
+    private BotPlayer botPlayer;
+
     private final Map<Ship, Label> humanShipLabels = new HashMap<>();
     private final Map<Ship, Label> botShipLabels = new HashMap<>();
 
@@ -55,6 +65,8 @@ public class GameController {
     }
 
     public void initGameWithGrid(HumanPlayer humanPlayer, BotPlayer botPlayer) {
+        this.humanPlayer = humanPlayer;
+        this.botPlayer = botPlayer;
         game = new Game(humanPlayer, botPlayer);
 
         botPlayer.placeCpuShip();
@@ -132,17 +144,23 @@ public class GameController {
 
         if (result.gameOver()) {
             logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
+            try {
+                endGameView(game.getCurrentTurn(), Winner.HUMAN);
+            } catch (IOException e) {
+                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e );
+            }
             return;
         }
 
-        delayBot.setText("L'adversaire réfléchit...");
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-        pause.setOnFinished(_ -> {
-            handleBotShot();
-            delayBot.setText("");
-                }
-        );
-        pause.play();
+//        delayBot.setText("L'adversaire réfléchit...");
+//        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+//        pause.setOnFinished(_ -> {
+//            handleBotShot();
+//            delayBot.setText("");
+//                }
+//        );
+//        pause.play();
+        handleBotShot();
     }
 
     private void handleBotShot() {
@@ -167,6 +185,11 @@ public class GameController {
 
         if (result.gameOver()) {
             logTextArea.appendText("DÉFAITE... Votre flotte a été anéantie.\n");
+            try {
+                endGameView(game.getCurrentTurn(), Winner.BOT);
+            } catch (IOException e) {
+                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e );
+            }
             return;
         }
 
@@ -191,5 +214,20 @@ public class GameController {
 
         labelToUpdate.setText(result.shipHit().getName() + "- COULÉ ☠️");
         labelToUpdate.setTextFill(Color.DARKRED);
+    }
+
+    private void endGameView(int currentTurn, Winner winner) throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/endgame-view.fxml"));
+        Parent root = fxmlLoader.load();
+
+        EndGameController endGameController = fxmlLoader.getController();
+        endGameController.endGameView(currentTurn, winner, humanPlayer.getShips(), botPlayer.getShips());
+
+        Stage stage = (Stage) playerGridPane.getScene().getWindow();
+
+        Scene scene = new Scene(root, 1080, 720);
+        stage.setTitle("Bataille Javal - Fin de partie");
+        stage.setScene(scene);
+        stage.show();
     }
 }

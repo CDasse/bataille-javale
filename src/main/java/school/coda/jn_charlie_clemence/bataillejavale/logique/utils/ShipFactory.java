@@ -7,6 +7,10 @@ import java.util.List;
 
 public class ShipFactory {
 
+    private ShipFactory() {
+        throw new UnsupportedOperationException("Cette classe utilitaire ne doit pas être instanciée.");
+    }
+
     public static List<Ship> createFleet() {
         List<Ship> fleet = new ArrayList<>();
 

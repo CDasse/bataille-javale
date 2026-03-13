@@ -278,7 +278,7 @@ public class PlacementFleetController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         Scene scene = new Scene(root, 1080, 720);
-        stage.setTitle("Bataille Javal");
+        stage.setTitle("Bataille Javal - Jeu");
         stage.setScene(scene);
         stage.show();
     }
