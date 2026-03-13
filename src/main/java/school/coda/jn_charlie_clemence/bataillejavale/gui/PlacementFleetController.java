@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,10 +21,20 @@ import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
-import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 
 public class PlacementFleetController {
+
+    private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
+    private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+
+
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
 
     @FXML
     private GridPane gridPane;
@@ -175,6 +185,7 @@ public class PlacementFleetController {
                     placeShipToGrid(r, c, ship.getSize());
                     updateFleetStatus(playerFleetStatusBox, ship);
                     shipAlreadyPlaced.setText("");
+                    playPlacementSound();
                 } else {
                     shipAlreadyPlaced.setText("Bateau déja placé !");
                     shipAlreadyPlaced.setTextFill(Color.RED);
@@ -267,7 +278,7 @@ public class PlacementFleetController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        Scene scene = new Scene(root, 1080, 720);
+        Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Bataille Javal - Jeu");
         stage.setScene(scene);
         stage.show();

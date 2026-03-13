@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view.utils;
+package school.coda.jn_charlie_clemence.bataillejavale.gui.utils;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;

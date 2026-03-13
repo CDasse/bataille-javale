@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -16,11 +16,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.view.utils.Winner;
-import javax.sound.sampled.*;
-import java.io.File;
+import school.coda.jn_charlie_clemence.bataillejavale.gui.utils.Winner;
 
-import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,38 +39,6 @@ public class GameController {
     private final AudioClip winSound = (winSFX != null) ? new AudioClip(winSFX.toExternalForm()) : null;
     private final AudioClip loseSound = (loseSFX != null) ? new AudioClip(loseSFX.toExternalForm()) : null;
     private final AudioClip officialMusicSound = (officialMusicSFX != null) ? new AudioClip(officialMusicSFX.toExternalForm()) : null;
-
-    private void playTouchWaterSound() {
-        if (touchWaterSound != null) {
-            touchWaterSound.play();
-        }
-    }
-    private void playDiveShipSound() {
-        if (diveShipSound != null) {
-            diveShipSound.play();
-        }
-    }
-    private void playTouchShipSound() {
-        if (touchShipSound != null) {
-            touchShipSound.play();
-        }
-    }
-    private void playWinSound() {
-        if (winSound != null) {
-            winSound.play();
-        }
-    }
-    private void playLoseSound() {
-        if (loseSound != null) {
-            loseSound.play();
-        }
-    }
-    private void playOfficialMusiqueSound() {
-        if (officialMusicSound != null) {
-            officialMusicSound.setCycleCount(AudioClip.INDEFINITE);
-            officialMusicSound.play();
-        }
-    }
 
     @FXML
     private GridPane playerGridPane;
@@ -219,6 +185,8 @@ public class GameController {
     private void handleBotShot() {
         AttackResult result = game.nextCpuTurn();
 
+        botPlayer.recordResult(result, humanPlayer.getGrid());
+
         Rectangle attackedCell = humanCells[result.y()][result.x()];
 
         char letterRow = (char) ('A' + result.y());
@@ -266,10 +234,62 @@ public class GameController {
     }
 
     private void markShipAsSunk(AttackResult result, Map<Ship, Label> labelsMap) {
-        Label labelToUpdate = labelsMap.get(result.shipHit());
+        Ship hitShip = result.shipHit();
+        if (hitShip == null) return;
 
-        labelToUpdate.setText(result.shipHit().getName() + "- COULÉ ☠️");
-        labelToUpdate.setTextFill(Color.DARKRED);
+        Label labelToUpdate = labelsMap.get(hitShip);
+
+        // make a search by name if didn't find the first time
+        if (labelToUpdate == null) {
+            for (Map.Entry<Ship, Label> entry : labelsMap.entrySet()) {
+                if (entry.getKey().getName().equals(hitShip.getName())) {
+                    labelToUpdate = entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (labelToUpdate != null) {
+            labelToUpdate.setText(hitShip.getName() + " - COULÉ ☠️");
+            labelToUpdate.setTextFill(Color.DARKRED);
+        }
+    }
+
+    private void playTouchWaterSound() {
+        if (touchWaterSound != null) {
+            touchWaterSound.play();
+        }
+    }
+
+    private void playDiveShipSound() {
+        if (diveShipSound != null) {
+            diveShipSound.play();
+        }
+    }
+
+    private void playTouchShipSound() {
+        if (touchShipSound != null) {
+            touchShipSound.play();
+        }
+    }
+
+    private void playWinSound() {
+        if (winSound != null) {
+            winSound.play();
+        }
+    }
+
+    private void playLoseSound() {
+        if (loseSound != null) {
+            loseSound.play();
+        }
+    }
+
+    private void playOfficialMusiqueSound() {
+        if (officialMusicSound != null) {
+            officialMusicSound.setCycleCount(AudioClip.INDEFINITE);
+            officialMusicSound.play();
+        }
     }
 
     private void endGameView(int currentTurn, Winner winner) throws IOException{
@@ -277,11 +297,11 @@ public class GameController {
         Parent root = fxmlLoader.load();
 
         EndGameController endGameController = fxmlLoader.getController();
-        endGameController.endGameView(currentTurn, winner, humanPlayer.getShips(), botPlayer.getShips());
+        endGameController.endGameView(currentTurn, winner);
 
         Stage stage = (Stage) playerGridPane.getScene().getWindow();
 
-        Scene scene = new Scene(root, 1080, 720);
+        Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Bataille Javal - Fin de partie");
         stage.setScene(scene);
         stage.show();

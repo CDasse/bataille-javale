@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class BatailleJavaleApplication extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/accueil.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
+            Scene scene = new Scene(fxmlLoader.load(), 1600, 900);
             stage.setTitle("Bataille Javal");
             stage.setScene(scene);
             stage.show();

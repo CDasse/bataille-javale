@@ -1,12 +1,11 @@
-package school.coda.jn_charlie_clemence.bataillejavale.controller;
+package school.coda.jn_charlie_clemence.bataillejavale.tui;
 
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.view.tui.ConsoleView;
 
 public class TUIController {
     private Game game;
-    private ConsoleView view;
+    private final ConsoleView view;
     private Player human;
     private BotPlayer cpu;
 
@@ -61,7 +60,7 @@ public class TUIController {
         } else {
             winner = cpu.getName();
         }
-
+        view.displayMessage("Partie terminée en " + game.getCurrentTurn() + " tours.");
         view.displayEndMenu(winner);
     }
 
@@ -88,10 +87,12 @@ public class TUIController {
     }
 
     public void playTurn(){
+        view.displayTurnCount(game.getCurrentTurn());
+
         AttackResult humanResult = null;
 
         view.displayGrid(human.getGrid(), "--- MA FLOTTE ---", false);
-        view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
+        view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
 
         view.displayMessage("=== PHASE DE TIR ===");
 
@@ -101,14 +102,14 @@ public class TUIController {
 
             if (humanResult == null){
                 view.displayErrorMessage("Case déjà visée! Choissisez une autre cible");
-                view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
+                view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
             }
         }
         view.displayAttackResult(humanResult, human.getName());
 
         if (!game.isGameOver()) {
             view.displayMessage("\nTour de l'adversaire...");
-            try { Thread.sleep(250); } catch (InterruptedException _) {};
+            try { Thread.sleep(250); } catch (InterruptedException _) {}
             AttackResult cpuResult = game.nextCpuTurn();
             cpu.recordResult(cpuResult, human.getGrid());
             view.displayAttackResult(cpuResult, cpu.getName());

@@ -1,64 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Slider?>
-
 <?import javafx.scene.layout.HBox?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.PlacementFleetController">
+<?import javafx.geometry.Insets?>
+
+
+
+<VBox alignment="CENTER" spacing="50.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.PlacementFleetController">
+
+    <Label text="Placement de votre flotte" alignment="CENTER" style="-fx-font-weight: bold;" />
+
+    <HBox alignment="CENTER" spacing="50.0">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
+    <VBox alignment="CENTER_LEFT" spacing="30.0" prefWidth="300">
 
-    <VBox alignment="CENTER">
-        <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
-        <Label alignment="CENTER" text="Appuyer sur R pour changer l'orientation." />
+        <VBox spacing="10.0">
+            <Label text="Largeur de la grille (Width) :" style="-fx-font-weight: bold;"/>
+            <Slider fx:id="widthSlider"
+                    min="8" max="15" value="10"
+                    showTickLabels="true" showTickMarks="true"
+                    majorTickUnit="1" minorTickCount="0" snapToTicks="true"/>
+
+            <Label text="Hauteur de la grille (Height) :" style="-fx-font-weight: bold;"/>
+            <Slider fx:id="heightSlider"
+                    min="8" max="15" value="10"
+                    showTickLabels="true" showTickMarks="true"
+                    majorTickUnit="1" minorTickCount="0" snapToTicks="true"/>
+
+            <Button text="Générer une nouvelle grille" onAction="#initializePlayers" maxWidth="Infinity" style="-fx-font-weight: bold;"/>
+        </VBox>
+
+        <VBox spacing="10.0">
+            <Label text="Bateaux à placer :" style="-fx-font-weight: bold;"/>
+            <Button text="Porte-avions (5 cases)" onAction="#addPorteAvions" maxWidth="Infinity"/>
+            <Button text="Cuirassé (4 cases)" onAction="#addCuirasse" maxWidth="Infinity"/>
+            <Button text="Destroyer (3 cases)" onAction="#addDestroyer" maxWidth="Infinity"/>
+            <Button text="Sous-Marin (3 cases)" onAction="#addSousMarin" maxWidth="Infinity"/>
+            <Button text="Patrouilleur (2 cases)" onAction="#addPatrouilleur" maxWidth="Infinity"/>
+        </VBox>
+
+        <Label fx:id="shipAlreadyPlaced" textFill="RED" wrapText="true"/>
+
+        <Button text="LANCER LA PARTIE" onAction="#startGame" maxWidth="Infinity"
+                style="-fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10px;"/>
+
     </VBox>
 
-    <Button text="Générer une nouvelle grille" onAction="#initializePlayers"/>
 
-    <HBox alignment="CENTER">
-        <Button text="Porte-avions (5 cases)" onAction="#addPorteAvions"/>
-        <Button text="Cuirassé (4 cases)" onAction="#addCuirasse"/>
-        <Button text="Destroyer (3 cases)" onAction="#addDestroyer"/>
-        <Button text="Sous-Marin (3 cases)" onAction="#addSousMarin"/>
-        <Button text="Patrouilleur (2 cases)" onAction="#addPatrouilleur"/>
+    <VBox alignment="CENTER" spacing="30.0" HBox.hgrow="ALWAYS">
+
+        <Label fx:id="welcomeText" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+        <VBox alignment="CENTER" spacing="5.0">
+            <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
+            <Label alignment="CENTER" text="Appuyer sur R pour changer l'orientation du navire." style="-fx-font-style: italic; -fx-text-fill: gray;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #f4f4f4; -fx-padding: 15px; -fx-border-color: #cccccc; -fx-border-radius: 5px; -fx-background-radius: 5px;">
+            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Vos bateaux déjà placés :"/>
+            <VBox fx:id="playerFleetStatusBox" alignment="CENTER" spacing="5.0"/>
+        </VBox>
+
+    </VBox>
     </HBox>
 
-    <Label>Width of grid :</Label>
-    <Slider fx:id="widthSlider"
-            min="8"
-            max="15"
-            value="10"
-            showTickLabels="true"
-            showTickMarks="true"
-            majorTickUnit="1"
-            minorTickCount="0"
-            snapToTicks="true"/>
-
-    <Label>Height of grid :</Label>
-    <Slider fx:id="heightSlider"
-            min="8"
-            max="15"
-            value="10"
-            showTickLabels="true"
-            showTickMarks="true"
-            majorTickUnit="1"
-            minorTickCount="0"
-            snapToTicks="true"/>
-
-    <Button text="Lancer la partie" onAction="#startGame"/>
-
-    <VBox alignment="CENTER" spacing="10.0">
-        <Label style="-fx-font-weight: bold;" text="Vos bateaux placés :"/>
-        <VBox fx:id="playerFleetStatusBox" spacing="5.0"/>
-    </VBox>
-
-    <Label fx:id="shipAlreadyPlaced" />
 </VBox>

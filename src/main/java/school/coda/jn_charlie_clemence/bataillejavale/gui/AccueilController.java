@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +17,7 @@ public class AccueilController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        Scene scene = new Scene(root, 1080, 720);
+        Scene scene = new Scene(root, 1600, 900);
         stage.setTitle("Bataille Javal - Placement de la flotte");
         stage.setScene(scene);
         stage.show();

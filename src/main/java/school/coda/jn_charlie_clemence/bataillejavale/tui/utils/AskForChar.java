@@ -1,9 +1,9 @@
-package school.coda.jn_charlie_clemence.bataillejavale.logique.utils;
+package school.coda.jn_charlie_clemence.bataillejavale.tui.utils;
 
 import java.util.Scanner;
 
 public class AskForChar {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static int askForChar(String message, int gridSize) {
         char maxLetter = (char) ('A' + gridSize - 1);

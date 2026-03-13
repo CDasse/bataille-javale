@@ -30,10 +30,6 @@ public class Cell {
         return false;
     }
 
-    public boolean hasBeenHit() {
-        return this.isTargeted && this.ship != null;
-    }
-
     public boolean isEmpty(){
         return this.ship == null;
     }
