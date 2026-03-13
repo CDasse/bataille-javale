@@ -86,4 +86,10 @@ public class BotPlayer extends Player {
         }
     }
 
+    public void resetStrategy (){
+        this.nextTargets.clear();
+        this.isHunting = false;
+        this.lastHit = null;
+    }
+
 }

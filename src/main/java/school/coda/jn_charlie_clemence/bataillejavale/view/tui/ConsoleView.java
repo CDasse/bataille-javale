@@ -88,4 +88,27 @@ public class ConsoleView {
     public Orientation askForShipOrientation() {
         return askForOrientation();
     }
+
+    public void displayMainMenu() {
+        System.out.println(" ______       _         _ _ _        _               _      ");
+        System.out.println(" | ___ \\     | |       (_) | |      | |             | |     ");
+        System.out.println(" | |_/ / __ _| |_ __ _ _| | | ___  | | __ ___   __ _| | ___ ");
+        System.out.println(" | ___ \\/ _` | __/ _` | | | |/ _ \\ | |/ _` \\ \\ / _` | |/ _ \\");
+        System.out.println(" | |_/ / (_| | || (_| | | | |  __/ | | (_| |\\ V / (_| |  __/");
+        System.out.println(" \\____/ \\__,_|\\__\\__,_|_|_|_|\\___| |_|\\__,_| \\_/ \\__,_|_|\\___|");
+        System.out.println("\n[1] NOUVELLE PARTIE");
+        System.out.println("[2] QUITTER");
+        System.out.print("\n> ");
+    }
+
+    public void displayEndMenu(String winnerName) {
+        System.out.println("\n*******************************************");
+        System.out.println("          FIN DE LA PARTIE                 ");
+        System.out.println("*******************************************");
+        System.out.println("   VICTOIRE DE : " + winnerName.toUpperCase());
+        System.out.println("*******************************************");
+        System.out.println("\nAppuyez sur [ENTRÉE] pour revenir au menu...");
+
+        IO.readln();
+    }
 }

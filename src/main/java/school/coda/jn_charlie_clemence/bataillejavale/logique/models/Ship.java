@@ -37,5 +37,9 @@ public class Ship {
         return false;
     }
 
+    public void reset() {
+        this.hp = this.size;
+    }
+
 }
 
