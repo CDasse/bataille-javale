@@ -1,5 +1,10 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.net.URL;
+import javafx.scene.media.AudioClip;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,15 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
-
-import javafx.scene.media.AudioClip;
-import java.net.URL;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
 
 
 public class PlacementFleetController {
@@ -126,10 +124,13 @@ public class PlacementFleetController {
 
         casesCoordinates = new Rectangle[rows][cols];
 
+        showNameOfGridRows(rows, gridPane);
+        showNameOfGridCols(cols, gridPane);
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 
-                Rectangle cell = new Rectangle(20, 20);
+                Rectangle cell = new Rectangle(30, 30);
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
@@ -141,7 +142,7 @@ public class PlacementFleetController {
 
                 setOnMouseClicked(grid, cell, col, row);
 
-                gridPane.add(cell, col, row);
+                gridPane.add(cell, col + 1, row + 1);
             }
         }
         toggleOrientation();

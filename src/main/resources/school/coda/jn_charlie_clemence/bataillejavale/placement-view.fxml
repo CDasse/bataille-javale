@@ -16,7 +16,10 @@
 
     <Label fx:id="welcomeText"/>
 
-    <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
+    <VBox alignment="CENTER">
+        <GridPane fx:id="gridPane" alignment="CENTER" hgap="1" vgap="1"/>
+        <Label alignment="CENTER" text="Appuyer sur R pour changer l'orientation." />
+    </VBox>
 
     <Button text="Générer une nouvelle grille" onAction="#initializePlayers"/>
 

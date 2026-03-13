@@ -11,9 +11,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
+import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 
 public class GameController {
@@ -72,6 +75,9 @@ public class GameController {
         int rows = grid.getHeight();
         int cols = grid.getWidth();
 
+        showNameOfGridCols(cols, playerGridPane);
+        showNameOfGridRows(rows, playerGridPane);
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 
@@ -94,7 +100,7 @@ public class GameController {
 
                     cell.setOnMouseClicked(_ -> handlePlayerShot(r, c));
                 }
-                playerGridPane.add(cell, col, row);
+                playerGridPane.add(cell, col + 1, row + 1);
             }
         }
     }
@@ -152,7 +158,7 @@ public class GameController {
                 logTextArea.appendText("OUPS ! L'adversaire a COULÉ ton " + result.shipHit().getName() + " !\n");
                 markShipAsSunk(result, humanShipLabels);
             } else {
-                logTextArea.appendText("Alerte ! L'adversaire' a touché votre navire en [" + (result.x() + 1) + "-" + letterRow + "] !\n");
+                logTextArea.appendText("Alerte ! L'adversaire a touché votre navire en [" + (result.x() + 1) + "-" + letterRow + "] !\n");
             }
         } else {
             attackedCell.setFill(Color.DARKGRAY);
