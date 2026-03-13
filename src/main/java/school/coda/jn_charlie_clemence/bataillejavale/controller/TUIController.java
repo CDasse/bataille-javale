@@ -17,19 +17,51 @@ public class TUIController {
         this.cpu = cpu;
     }
 
+    public void launchApp(){
+        boolean keepRunning = true;
+
+        while (keepRunning){
+            view.displayMainMenu();
+            String choice = IO.readln();
+
+            switch (choice){
+                case "1":
+                    play();
+                    break;
+                case "2":
+                    keepRunning = false;
+                    view.displayMessage("Au revoir!");
+                    break;
+                default:
+                    view.displayMessage("Choix invalide, réeassayer!");
+                    break;
+            }
+        }
+    }
+
     public void play(){
+        human.getGrid().resetGrid();
+        cpu.getGrid().resetGrid();
+
+        for (Ship ship : human.getShips()) ship.reset();
+        for (Ship ship : cpu.getShips()) ship.reset();
+
+        cpu.resetStrategy();
+
         setupStage();
 
         while (!game.isGameOver()){
             playTurn();
         }
 
-        view.displayMessage("=== LA PARTIE EST TERMINÉ ===");
+        String winner;
         if (cpu.getGrid().allShipsSunk()){
-            view.displayMessage("!!!!! Félicitations vous avez remporté cette partie !!!!!");
+            winner = human.getName();
         } else {
-            view.displayMessage("!!!!! Dommage... l'ordinateur a remporté cette partie!!!!!");
+            winner = cpu.getName();
         }
+
+        view.displayEndMenu(winner);
     }
 
     public void setupStage(){
@@ -75,8 +107,9 @@ public class TUIController {
 
         if (!game.isGameOver()) {
             view.displayMessage("\nTour de l'adversaire...");
-            try { Thread.sleep(1500); } catch (InterruptedException e) {};
+            try { Thread.sleep(250); } catch (InterruptedException _) {};
             AttackResult cpuResult = game.nextCpuTurn();
+            cpu.recordResult(cpuResult, human.getGrid());
             view.displayAttackResult(cpuResult, cpu.getName());
         }
     }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<VBox alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.EndGameController"
+      prefHeight="400.0" prefWidth="600.0">
+
+    <Label fx:id="gameResult" alignment="CENTER" />
+
+    <VBox spacing="10.0" alignment="CENTER">
+        <Label style="-fx-font-weight: bold;" text="État de la flotte de votre adversaire :"/>
+        <VBox fx:id="botFleetStatusBox" alignment="CENTER" spacing="5.0"/>
+    </VBox>
+
+    <VBox spacing="10.0" alignment="CENTER">
+        <Label style="-fx-font-weight: bold;" text="État de votre flotte :"/>
+        <VBox fx:id="humanFleetStatusBox" alignment="CENTER" spacing="5.0"/>
+    </VBox>
+
+    <Label fx:id="nbOfTurn" alignment="CENTER" />
+
+    <Button onAction="#goBackToHomePage" text="Retourner à l'accueil" />
+</VBox>

@@ -1,5 +1,10 @@
 package school.coda.jn_charlie_clemence.bataillejavale.view;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.net.URL;
+import javafx.scene.media.AudioClip;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,13 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
-
-import javafx.scene.media.AudioClip;
-import java.net.URL;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
+import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
 
 
 public class PlacementFleetController {
@@ -75,36 +75,32 @@ public class PlacementFleetController {
 
     @FXML
     private void addPorteAvions() {
-        this.shipToPlace = EnumShip.PORTEAVIONS;
-        setTextPlacementShip(shipToPlace.name);
+        add(PORTEAVIONS);
     }
 
     @FXML
     private void addCuirasse() {
-        this.shipToPlace = EnumShip.CUIRASSE;
-        setTextPlacementShip(shipToPlace.name);
+        add(CUIRASSE);
     }
 
     @FXML
     private void addDestroyer() {
-        this.shipToPlace = EnumShip.DESTROYER;
-        setTextPlacementShip(shipToPlace.name);
+        add(DESTROYER);
     }
 
     @FXML
     public void addSousMarin() {
-        this.shipToPlace = EnumShip.SOUSMARIN;
-        setTextPlacementShip(shipToPlace.name);
+        add(SOUSMARIN);
     }
 
     @FXML
     public void addPatrouilleur() {
-        this.shipToPlace = EnumShip.PATROUILLEUR;
-        setTextPlacementShip(shipToPlace.name);
+        add(PATROUILLEUR);
     }
 
-    private void setTextPlacementShip(String name) {
-        welcomeText.setText("Placement : " + name);
+    private void add(EnumShip porteavions) {
+        this.shipToPlace = porteavions;
+        welcomeText.setText("Placement : " + shipToPlace.name);
     }
 
     @FXML
@@ -121,6 +117,19 @@ public class PlacementFleetController {
         welcomeText.setText("New grid generated !");
     }
 
+    /**
+     * Visually initializes the ship placement grid in the user interface.
+     * <p>
+     * This method clears the current {@code GridPane}, then generates a two-dimensional
+     * array of {@link Rectangle} matching the size of the logical grid. Each cell is
+     * configured with its default appearance and assigned its event handlers
+     * (hover for previewing and click for placement).
+     * Finally, it activates the listener for changing the fleet's orientation.
+     * </p>
+     *
+     * @param grid The player's logical grid ({@link Grid}), providing the dimensions
+     * (width and height) needed to draw the interactive board.
+     */
     private void initializeGrid(Grid grid) {
         this.gridPane.getChildren().clear();
 
@@ -129,10 +138,13 @@ public class PlacementFleetController {
 
         casesCoordinates = new Rectangle[rows][cols];
 
+        showNameOfGridRows(rows, gridPane);
+        showNameOfGridCols(cols, gridPane);
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
 
-                Rectangle cell = new Rectangle(20, 20);
+                Rectangle cell = new Rectangle(30, 30);
                 cell.setFill(Color.LIGHTBLUE);
                 cell.setStroke(Color.WHITE);
 
@@ -144,7 +156,7 @@ public class PlacementFleetController {
 
                 setOnMouseClicked(grid, cell, col, row);
 
-                gridPane.add(cell, col, row);
+                gridPane.add(cell, col + 1, row + 1);
             }
         }
         toggleOrientation();
@@ -177,7 +189,7 @@ public class PlacementFleetController {
                 assert ship != null;
                 if (grid.canPlaceShip(ship, c, r, currentOrientation)) {
                     grid.placeShip(ship, c, r, currentOrientation);
-                    fixShipToGrid(r, c, ship.getSize());
+                    placeShipToGrid(r, c, ship.getSize());
                     updateFleetStatus(playerFleetStatusBox, ship);
                     shipAlreadyPlaced.setText("");
                     playPlacementSound();
@@ -196,10 +208,10 @@ public class PlacementFleetController {
             int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
             int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
 
-            Rectangle voisin = getCellFromGrid(targetRow, targetCol);
+            Rectangle neighborCell = getCellFromGrid(targetRow, targetCol);
 
-            if (voisin != null && grid.isCellEmpty(targetCol, targetRow)) {
-                voisin.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
+            if (neighborCell != null && grid.isCellEmpty(targetCol, targetRow)) {
+                neighborCell.setFill(canPlace ? Color.LIGHTGREEN : Color.LIGHTCORAL);
             }
         }
     }
@@ -210,10 +222,10 @@ public class PlacementFleetController {
             int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
             int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
 
-            Rectangle voisin = getCellFromGrid(targetRow, targetCol);
+            Rectangle neighborCell = getCellFromGrid(targetRow, targetCol);
 
-            if (voisin != null && humanPlayer.getGrid().isCellEmpty(targetCol, targetRow)) {
-                voisin.setFill(Color.LIGHTBLUE);
+            if (neighborCell != null && humanPlayer.getGrid().isCellEmpty(targetCol, targetRow)) {
+                neighborCell.setFill(Color.LIGHTBLUE);
             }
         }
     }
@@ -242,7 +254,7 @@ public class PlacementFleetController {
         return null;
     }
 
-    private void fixShipToGrid(int row, int col, int size) {
+    private void placeShipToGrid(int row, int col, int size) {
         for (int i = 0; i < size; i++) {
             int targetRow = (currentOrientation == Orientation.HORIZONTAL) ? row : row + i;
             int targetCol = (currentOrientation == Orientation.HORIZONTAL) ? col + i : col;
@@ -260,7 +272,13 @@ public class PlacementFleetController {
         return null;
     }
 
-    public void gameButton(ActionEvent event) throws IOException {
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
+
+    public void startGame(ActionEvent event) throws IOException {
         if (humanPlayer.getGrid().getListShipsPlaced().size() < 5) {
             return;
         }
@@ -274,7 +292,7 @@ public class PlacementFleetController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         Scene scene = new Scene(root, 1080, 720);
-        stage.setTitle("Bataille Javal");
+        stage.setTitle("Bataille Javal - Jeu");
         stage.setScene(scene);
         stage.show();
     }

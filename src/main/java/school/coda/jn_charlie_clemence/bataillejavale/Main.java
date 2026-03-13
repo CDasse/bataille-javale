@@ -20,7 +20,7 @@ public class Main {
 
         TUIController tui = new TUIController(view, game, human, cpu);
 
-        tui.play();
+        tui.launchApp();
 
     }
 }
