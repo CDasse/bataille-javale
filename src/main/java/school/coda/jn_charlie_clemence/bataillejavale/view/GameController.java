@@ -17,6 +17,8 @@ import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
 import school.coda.jn_charlie_clemence.bataillejavale.view.utils.Winner;
+import javax.sound.sampled.*;
+import java.io.File;
 
 import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
 
@@ -31,12 +33,14 @@ public class GameController {
     private final URL touchShipSFX = getClass().getResource("/sounds/explosion.wav");
     private final URL winSFX = getClass().getResource("/sounds/win.wav");
     private final URL loseSFX = getClass().getResource("/sounds/lose.wav");
+    private final URL officialMusicSFX = getClass().getResource("/sounds/official_musique_bataille_javale.wav");
 
     private final AudioClip touchWaterSound = (touchWaterSFX != null) ? new AudioClip(touchWaterSFX.toExternalForm()) : null;
     private final AudioClip diveShipSound = (diveShipSFX != null) ? new AudioClip(diveShipSFX.toExternalForm()) : null;
     private final AudioClip touchShipSound = (touchShipSFX != null) ? new AudioClip(touchShipSFX.toExternalForm()) : null;
     private final AudioClip winSound = (winSFX != null) ? new AudioClip(winSFX.toExternalForm()) : null;
     private final AudioClip loseSound = (loseSFX != null) ? new AudioClip(loseSFX.toExternalForm()) : null;
+    private final AudioClip officialMusicSound = (officialMusicSFX != null) ? new AudioClip(officialMusicSFX.toExternalForm()) : null;
 
     private void playTouchWaterSound() {
         if (touchWaterSound != null) {
@@ -61,6 +65,12 @@ public class GameController {
     private void playLoseSound() {
         if (loseSound != null) {
             loseSound.play();
+        }
+    }
+    private void playOfficialMusiqueSound() {
+        if (officialMusicSound != null) {
+            officialMusicSound.setCycleCount(AudioClip.INDEFINITE);
+            officialMusicSound.play();
         }
     }
 
@@ -121,6 +131,7 @@ public class GameController {
     }
 
     private void drawGrid(GridPane playerGridPane, Grid grid, boolean isRadarGrid, Rectangle[][] cellArray) {
+        playOfficialMusiqueSound();
         int rows = grid.getHeight();
         int cols = grid.getWidth();
 
@@ -216,13 +227,16 @@ public class GameController {
             attackedCell.setFill(Color.RED);
             if (result.sunk()) {
                 logTextArea.appendText("OUPS ! L'adversaire a COULÉ ton " + result.shipHit().getName() + " !\n");
+                playDiveShipSound();
                 markShipAsSunk(result, humanShipLabels);
             } else {
                 logTextArea.appendText("Alerte ! L'adversaire a touché votre navire en [" + (result.x() + 1) + "-" + letterRow + "] !\n");
+                playTouchShipSound();
             }
         } else {
             attackedCell.setFill(Color.DARKGRAY);
             logTextArea.appendText("L'adversaire a tiré à l'eau en [" + (result.x() + 1) + "-" + letterRow + "].\n");
+            playTouchWaterSound();
         }
 
         if (result.gameOver()) {
