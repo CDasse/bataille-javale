@@ -12,44 +12,43 @@ import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class GameController {
-    
-    @FXML
-    private Label turnLabel;
-
     @FXML
     private GridPane playerGridPane;
-
-    @FXML
-    private VBox playerFleetStatusBox;
 
     @FXML
     private GridPane botGridPane;
 
     @FXML
+    private VBox playerFleetStatusBox;
+
+    @FXML
     private VBox botFleetStatusBox;
+
+    @FXML
+    private Label turnLabel;
 
     @FXML
     private TextArea logTextArea;
 
-    private HumanPlayer humanPlayer;
-    private BotPlayer botPlayer;
+    private final Map<Ship, Label> humanShipLabels = new HashMap<>();
+    private final Map<Ship, Label> botShipLabels = new HashMap<>();
 
     private Rectangle[][] humanCells;
     private Rectangle[][] botCells;
 
     private Game game;
-    
+
     @FXML
     public void initialize() {
         logTextArea.appendText("La bataille commence. Préparez vos canons !\n\n");
     }
 
     public void initGameWithGrid(HumanPlayer humanPlayer, BotPlayer botPlayer) {
-        this.humanPlayer = humanPlayer;
-        this.botPlayer = botPlayer;
-
         game = new Game(humanPlayer, botPlayer);
 
         botPlayer.placeCpuShip();
@@ -62,11 +61,11 @@ public class GameController {
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
 
-        updateFleetStatus(humanPlayer, playerFleetStatusBox);
-        updateFleetStatus(botPlayer, botFleetStatusBox);
+        initFleetStatus(humanPlayer, playerFleetStatusBox, humanShipLabels);
+        initFleetStatus(botPlayer, botFleetStatusBox, botShipLabels);
     }
 
-    private void drawGrid(GridPane playerGridPane, Grid grid, boolean isClickable, Rectangle[][] cellArray) {
+    private void drawGrid(GridPane playerGridPane, Grid grid, boolean isRadarGrid, Rectangle[][] cellArray) {
         int rows = grid.getHeight();
         int cols = grid.getWidth();
 
@@ -76,7 +75,8 @@ public class GameController {
                 Rectangle cell = new Rectangle(30, 30);
                 cell.setStroke(Color.WHITE);
 
-                if (!isClickable && !grid.isCellEmpty(col, row)) {
+                boolean isOceanCellWithShip = !isRadarGrid && !grid.isCellEmpty(col, row);
+                if (isOceanCellWithShip) {
                     cell.setFill(Color.DARKBLUE);
                 } else {
                     cell.setFill(Color.LIGHTBLUE);
@@ -84,7 +84,7 @@ public class GameController {
 
                 cellArray[row][col] = cell;
 
-                if (isClickable) {
+                if (isRadarGrid) {
 
                     final int r = row;
                     final int c = col;
@@ -99,6 +99,7 @@ public class GameController {
     private void handlePlayerShot(int row, int col) {
         AttackResult result = game.nextHumanTurn(col, row);
 
+        // return if it's not player turn or the cell has already been clicked
         if (result == null) {
             return;
         }
@@ -111,7 +112,7 @@ public class GameController {
             clickedCell.setFill(Color.RED);
             if (result.sunk()) {
                 logTextArea.appendText("BOUM ! Le " + result.shipHit().getName() + " ennemi a été COULÉ !\n");
-                updateFleetStatus(botPlayer, botFleetStatusBox);
+                markShipAsSunk(result, botShipLabels);
             } else {
                 logTextArea.appendText("Navire ennemi TOUCHÉ en [" + (col + 1) + "-" + letterRow + "] !\n");
             }
@@ -142,7 +143,7 @@ public class GameController {
             attackedCell.setFill(Color.RED);
             if (result.sunk()) {
                 logTextArea.appendText("OUPS ! L'adversaire a COULÉ ton " + result.shipHit().getName() + " !\n");
-                updateFleetStatus(humanPlayer, playerFleetStatusBox);
+                markShipAsSunk(result, humanShipLabels);
             } else {
                 logTextArea.appendText("Alerte ! L'adversaire' a touché votre navire en [" + (result.x() + 1) + "-" + letterRow + "] !\n");
             }
@@ -159,21 +160,23 @@ public class GameController {
         turnLabel.setText("Tour " + result.currentTurn());
     }
 
-    private void updateFleetStatus(Player player, VBox statusBox) {
+    private void initFleetStatus(Player player, VBox statusBox, Map<Ship, Label> labelsMap) {
         statusBox.getChildren().clear();
+        labelsMap.clear();
 
         for (Ship ship : player.getShips()) {
-            if (ship.isSunk()) {
-                Label statusLabel = new Label(ship.getName() + " - COULÉ ☠️");
-                statusLabel.setTextFill(Color.DARKRED);
-                statusBox.getChildren().add(statusLabel);
-            }
-        }
+            Label statusLabel = new Label(ship.getName());
+            statusLabel.setTextFill(Color.DARKGREEN);
+            statusBox.getChildren().add(statusLabel);
 
-        if (statusBox.getChildren().isEmpty()) {
-            Label allSafeLabel = new Label("Tous les navires sont à flot.");
-            allSafeLabel.setTextFill(Color.GRAY);
-            statusBox.getChildren().add(allSafeLabel);
+            labelsMap.put(ship, statusLabel);
         }
+    }
+
+    private void markShipAsSunk(AttackResult result, Map<Ship, Label> labelsMap) {
+        Label labelToUpdate = labelsMap.get(result.shipHit());
+
+        labelToUpdate.setText(result.shipHit().getName() + "- COULÉ ☠️");
+        labelToUpdate.setTextFill(Color.DARKRED);
     }
 }

@@ -50,7 +50,7 @@
             minorTickCount="0"
             snapToTicks="true"/>
 
-    <Button text="Lancer la partie" onAction="#gameButton"/>
+    <Button text="Lancer la partie" onAction="#startGame"/>
 
     <VBox alignment="CENTER" spacing="10.0">
         <Label style="-fx-font-weight: bold;" text="Vos bateaux placés :"/>
