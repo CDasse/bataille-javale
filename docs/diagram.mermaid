@@ -1,0 +1,103 @@
+classDiagram
+direction BT
+class AttackResult {
+  + AttackResult(int, int, boolean, boolean, Ship, boolean)
+  + shipHit() Ship
+  + sunk() boolean
+  + gameOver() boolean
+  + x() int
+  + y() int
+  + hit() boolean
+}
+class BotPlayer {
+  + BotPlayer(String, int, int)
+  + getNextMove(Grid) int[]
+  + placeCpuShip() void
+  + resetStrategy() void
+  + recordResult(AttackResult, Grid) void
+}
+class Cell {
+  + Cell()
+  - Ship ship
+  - boolean isTargeted
+  + receiveShot() boolean
+   boolean shipAlive
+   boolean isTargeted
+   Ship ship
+   boolean empty
+}
+class EnumShip {
+<<enumeration>>
+  - EnumShip(String)
+  + valueOf(String) EnumShip
+  + values() EnumShip[]
+}
+class Game {
+  + Game(Player, Player)
+  - int currentTurn
+  + nextHumanTurn(int, int) AttackResult
+  + nextCpuTurn() AttackResult
+  - executeShot(int, int) AttackResult?
+   boolean gameOver
+   int currentTurn
+}
+class Grid {
+  + Grid(int, int)
+  - int height
+  - int width
+  + placeShip(Ship, int, int, Orientation) boolean
+  + isCellEmpty(int, int) boolean
+  + canPlaceShip(Ship, int, int, Orientation) boolean
+  + isCellAlreadyTargeted(int, int) boolean
+  + getShipAt(int, int) Ship
+  + shoot(int, int) boolean
+  + allShipsSunk() boolean
+   List~String~ listShipsPlaced
+   int height
+   int width
+}
+class HumanPlayer {
+  + HumanPlayer(String, int, int)
+  + getNextMove(Grid) int[]
+}
+class Orientation {
+<<enumeration>>
+  + Orientation()
+  + values() Orientation[]
+  + valueOf(String) Orientation
+}
+class Player {
+  # Player(String, int, int)
+  - String name
+  - List~Ship~ ships
+  - Grid grid
+  + getNextMove(Grid) int[]
+   String name
+   Grid grid
+   List~Ship~ ships
+}
+class Ship {
+  + Ship(String, int)
+  - int size
+  - String name
+  + takeHit() void
+   String name
+   boolean sunk
+   int size
+}
+class ShipFactory {
+  - ShipFactory()
+  + createFleet() List~Ship~
+}
+
+BotPlayer  -->  Player
+Cell "1" *--> "ship 1" Ship
+Game  ..>  AttackResult : «create»
+Game "1" *--> "player 1" Player
+Grid "1" *--> "cells *" Cell
+Grid  ..>  Cell : «create»
+HumanPlayer  -->  Player
+Player "1" *--> "grid 1" Grid
+Player  ..>  Grid : «create»
+Player "1" *--> "ships *" Ship
+ShipFactory  ..>  Ship : «create»
