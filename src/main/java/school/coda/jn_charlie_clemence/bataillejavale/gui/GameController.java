@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -16,9 +16,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.view.utils.Winner;
+import school.coda.jn_charlie_clemence.bataillejavale.gui.utils.Winner;
 
-import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 import java.io.IOException;
 import java.net.URL;

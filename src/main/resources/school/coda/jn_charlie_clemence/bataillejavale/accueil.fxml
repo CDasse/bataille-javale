@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.AccueilController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.AccueilController">
 
     <VBox alignment="CENTER" spacing="20.0">
         <Button onAction="#playButton" text="NOUVELLE PARTIE !" />

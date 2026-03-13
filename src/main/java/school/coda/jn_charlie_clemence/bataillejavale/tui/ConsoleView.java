@@ -1,12 +1,12 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view.tui;
+package school.coda.jn_charlie_clemence.bataillejavale.tui;
 
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.AttackResult;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Orientation;
 
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForChar.askForChar;
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForInt.askForInt;
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForOrientation.askForOrientation;
+import static school.coda.jn_charlie_clemence.bataillejavale.tui.utils.AskForChar.askForChar;
+import static school.coda.jn_charlie_clemence.bataillejavale.tui.utils.AskForInt.askForInt;
+import static school.coda.jn_charlie_clemence.bataillejavale.tui.utils.AskForOrientation.askForOrientation;
 
 public class ConsoleView {
 

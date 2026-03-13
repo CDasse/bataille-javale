@@ -11,7 +11,7 @@
 
 
 <VBox alignment="CENTER" spacing="50.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.PlacementFleetController">
+      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.PlacementFleetController">
 
     <Label text="Placement de votre flotte" alignment="CENTER" style="-fx-font-weight: bold;" />
 

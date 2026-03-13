@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

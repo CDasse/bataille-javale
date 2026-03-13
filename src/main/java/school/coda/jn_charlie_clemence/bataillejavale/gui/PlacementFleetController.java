@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
-import static school.coda.jn_charlie_clemence.bataillejavale.view.utils.CoordinateUtils.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 
 public class PlacementFleetController {

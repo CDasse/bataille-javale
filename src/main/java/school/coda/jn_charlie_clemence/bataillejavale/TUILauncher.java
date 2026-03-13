@@ -1,16 +1,13 @@
 package school.coda.jn_charlie_clemence.bataillejavale;
 
-import school.coda.jn_charlie_clemence.bataillejavale.controller.TUIController;
+import school.coda.jn_charlie_clemence.bataillejavale.tui.TUIController;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.BotPlayer;
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Grid;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.HumanPlayer;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Player;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.view.tui.ConsoleView;
+import school.coda.jn_charlie_clemence.bataillejavale.tui.ConsoleView;
 
-import javax.swing.text.View;
-
-public class Main {
+public class TUILauncher {
     public static void main(String[] args) {
         ConsoleView view = new ConsoleView();
         Player human = new HumanPlayer("JOUEUR", 10, 10);

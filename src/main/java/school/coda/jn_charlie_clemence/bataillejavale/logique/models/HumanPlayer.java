@@ -1,12 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
 
-import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForInt;
-
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForChar.askForChar;
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForInt.askForInt;
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.utils.AskForOrientation.askForOrientation;
-
 public class HumanPlayer extends Player {
 
     public HumanPlayer(String name, int widthGrid, int heightGrid) {

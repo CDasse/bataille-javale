@@ -1,8 +1,7 @@
-package school.coda.jn_charlie_clemence.bataillejavale.controller;
+package school.coda.jn_charlie_clemence.bataillejavale.tui;
 
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.view.tui.ConsoleView;
 
 public class TUIController {
     private Game game;

@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.view;
+package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import school.coda.jn_charlie_clemence.bataillejavale.view.utils.Winner;
+import school.coda.jn_charlie_clemence.bataillejavale.gui.utils.Winner;
 import java.io.IOException;
 
 public class EndGameController {

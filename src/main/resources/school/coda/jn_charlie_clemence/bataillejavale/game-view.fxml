@@ -6,7 +6,7 @@
 <VBox alignment="CENTER" spacing="30.0"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.view.GameController">
+      fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.GameController">
 
     <Label fx:id="turnLabel" text="Tour 1" />
     <Label fx:id="delayBot" />

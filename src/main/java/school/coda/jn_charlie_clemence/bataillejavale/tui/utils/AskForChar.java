@@ -1,4 +1,4 @@
-package school.coda.jn_charlie_clemence.bataillejavale.logique.utils;
+package school.coda.jn_charlie_clemence.bataillejavale.tui.utils;
 
 import java.util.Scanner;
 
