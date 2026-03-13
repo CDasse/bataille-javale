@@ -5,7 +5,7 @@ import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
 
 public class TUIController {
     private Game game;
-    private ConsoleView view;
+    private final ConsoleView view;
     private Player human;
     private BotPlayer cpu;
 
@@ -109,7 +109,7 @@ public class TUIController {
 
         if (!game.isGameOver()) {
             view.displayMessage("\nTour de l'adversaire...");
-            try { Thread.sleep(250); } catch (InterruptedException _) {};
+            try { Thread.sleep(250); } catch (InterruptedException _) {}
             AttackResult cpuResult = game.nextCpuTurn();
             cpu.recordResult(cpuResult, human.getGrid());
             view.displayAttackResult(cpuResult, cpu.getName());

@@ -104,13 +104,4 @@ public class Grid {
         }
         return null;
     }
-
-    public void resetGrid () {
-        for (int row = 0; row < width; row++){
-            for (int column = 0; column < height; column++){
-                cells[row][column] = new Cell();
-            }
-        }
-        this.shipsAlreadyPlaced.clear();
-    }
 }

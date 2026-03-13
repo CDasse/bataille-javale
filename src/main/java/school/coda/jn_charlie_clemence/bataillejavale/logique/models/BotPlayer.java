@@ -2,12 +2,9 @@ package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
 import java.util.Random;
 import java.util.Stack;
-import java.util.random.RandomGenerator;
 
 public class BotPlayer extends Player {
-    private Stack<int[]> nextTargets = new Stack<>();
-    private boolean isHunting = false;
-    private int[] lastHit;
+    private final Stack<int[]> nextTargets = new Stack<>();
 
     public BotPlayer(String name, int widthGrid, int heightGrid) {
         super(name, widthGrid, heightGrid);
@@ -23,7 +20,7 @@ public class BotPlayer extends Player {
                 return nextTargets.pop();
             }
         }
-        isHunting = false;
+//        isHunting = false;
 
         Random rand = new Random();
 
@@ -47,9 +44,6 @@ public class BotPlayer extends Player {
         if (!result.hit()){
             return;
         }
-
-        isHunting = true;
-        lastHit = new int[]{result.x(), result.y()};
 
         int[][] cardinalites = {
                 {result.x(), result.y() - 1},
@@ -88,8 +82,6 @@ public class BotPlayer extends Player {
 
     public void resetStrategy (){
         this.nextTargets.clear();
-        this.isHunting = false;
-        this.lastHit = null;
     }
 
 }

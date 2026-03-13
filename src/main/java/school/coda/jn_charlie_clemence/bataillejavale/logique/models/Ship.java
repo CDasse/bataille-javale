@@ -19,27 +19,14 @@ public class Ship {
         return this.name;
     }
 
-    public int takeHit(){
+    public void takeHit(){
         if (this.hp > 0) {
             this.hp -= 1;
         }
-        return this.hp;
     }
 
     public boolean isSunk (){
         return this.hp == 0;
     }
-
-    public boolean isTouched() {
-        if (this.isSunk()) return false;
-        if (this.hp < this.size) return true;
-
-        return false;
-    }
-
-    public void reset() {
-        this.hp = this.size;
-    }
-
 }
 
