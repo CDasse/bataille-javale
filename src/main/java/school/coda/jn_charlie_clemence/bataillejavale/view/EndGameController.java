@@ -63,9 +63,8 @@ public class EndGameController {
         }
     }
 
-    public void goBackToHomePage(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/accueil.fxml"));
+    public void goBackToHomePage(ActionEvent event) throws IOException {
+            FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/accueil.fxml"));
             Parent root = fxmlLoader.load();
 
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
@@ -75,9 +74,5 @@ public class EndGameController {
             stage.setTitle("Bataille Javal - Accueil");
             stage.setScene(scene);
             stage.show();
-
-        } catch (IOException | RuntimeException e){
-            System.err.println("Erreur lors du retour à l'accueil : " + e.getMessage());
-        }
     }
 }

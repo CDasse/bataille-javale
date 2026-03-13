@@ -217,7 +217,7 @@ public class GameController {
     }
 
     private void endGameView(int currentTurn, Winner winner) throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/endgame-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/endgame-view.fxml"));
         Parent root = fxmlLoader.load();
 
         EndGameController endGameController = fxmlLoader.getController();
