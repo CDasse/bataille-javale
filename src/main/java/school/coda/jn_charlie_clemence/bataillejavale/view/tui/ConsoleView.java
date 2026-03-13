@@ -133,4 +133,10 @@ public class ConsoleView {
         }
         return size;
     }
+
+    public void displayTurnCount (int turn){
+        System.out.println("\n----------------------------");
+        System.out.println("        TOUR NUMÉRO : " + turn);
+        System.out.println("----------------------------");
+    }
 }

@@ -61,7 +61,7 @@ public class TUIController {
         } else {
             winner = cpu.getName();
         }
-
+        view.displayMessage("Partie terminée en " + game.getCurrentTurn() + " tours.");
         view.displayEndMenu(winner);
     }
 
@@ -88,6 +88,8 @@ public class TUIController {
     }
 
     public void playTurn(){
+        view.displayTurnCount(game.getCurrentTurn());
+
         AttackResult humanResult = null;
 
         view.displayGrid(human.getGrid(), "--- MA FLOTTE ---", false);
