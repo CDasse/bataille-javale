@@ -120,7 +120,7 @@ public class GameController {
             logTextArea.appendText("Tir à l'eau en [" + (col + 1) + "-" + letterRow + "].\n");
         }
 
-        if (result.GameOver()) {
+        if (result.gameOver()) {
             logTextArea.appendText("VICTOIRE ! Tous les navires ennemis sont au fond de l'océan !\n");
             return;
         }
@@ -151,7 +151,7 @@ public class GameController {
             logTextArea.appendText("L'adversaire a tiré à l'eau en [" + (result.x() + 1) + "-" + letterRow + "].\n");
         }
 
-        if (result.GameOver()) {
+        if (result.gameOver()) {
             logTextArea.appendText("DÉFAITE... Votre flotte a été anéantie.\n");
             return;
         }
