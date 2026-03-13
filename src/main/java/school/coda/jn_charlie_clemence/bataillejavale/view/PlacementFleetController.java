@@ -27,11 +27,19 @@ import java.util.Objects;
 public class PlacementFleetController {
 
     private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
+    private final URL explosionSFX = getClass().getResource("/sounds/explosion.wav");
     private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
+    private final AudioClip shipDownSound = (explosionSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
 
     private void playPlacementSound() {
         if (placeShipSound != null) {
             placeShipSound.play();
+        }
+    }
+
+    private void playShipDownSound() {
+        if (shipDownSound != null) {
+            shipDownSound.play();
         }
     }
 
