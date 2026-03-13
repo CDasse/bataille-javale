@@ -92,7 +92,7 @@ public class TUIController {
         AttackResult humanResult = null;
 
         view.displayGrid(human.getGrid(), "--- MA FLOTTE ---", false);
-        view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
+        view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
 
         view.displayMessage("=== PHASE DE TIR ===");
 
@@ -102,7 +102,7 @@ public class TUIController {
 
             if (humanResult == null){
                 view.displayErrorMessage("Case déjà visée! Choissisez une autre cible");
-                view.displayGrid(cpu.getGrid(), "--- RADAR ---", false);
+                view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
             }
         }
         view.displayAttackResult(humanResult, human.getName());

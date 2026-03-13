@@ -90,12 +90,13 @@ public class ConsoleView {
     }
 
     public void displayMainMenu() {
-        System.out.println(" ______       _         _ _ _        _               _      ");
-        System.out.println(" | ___ \\     | |       (_) | |      | |             | |     ");
-        System.out.println(" | |_/ / __ _| |_ __ _ _| | | ___  | | __ ___   __ _| | ___ ");
-        System.out.println(" | ___ \\/ _` | __/ _` | | | |/ _ \\ | |/ _` \\ \\ / _` | |/ _ \\");
-        System.out.println(" | |_/ / (_| | || (_| | | | |  __/ | | (_| |\\ V / (_| |  __/");
-        System.out.println(" \\____/ \\__,_|\\__\\__,_|_|_|_|\\___| |_|\\__,_| \\_/ \\__,_|_|\\___|");
+        System.out.println("______       _             _  _  _         _   _                    _      ");
+        System.out.println("| ___ \\     | |           (_)| || |       | \\ | |                  | |     ");
+        System.out.println("| |_/ / __ _| |_ __ _ _ _  _ | || | ___   |  \\| | __ ___   ____ _  | | ___ ");
+        System.out.println("| ___ \\/ _` | __/ _` | | | | | || |/ _ \\  | . ` |/ _` \\ \\ / / _` | | |/ _ \\");
+        System.out.println("| |_/ / (_| | || (_| | | |_| | || |  __/  | |\\  | (_| |\\ V / (_| | | |  __/");
+        System.out.println("\\____/ \\__,_|\\__\\__,_|_|\\__,_|_||_|\\___|  \\_| \\_/\\__,_| \\_/ \\__,_|_|_|\\___|");
+        System.out.println("                                                                              ");
         System.out.println("\n[1] NOUVELLE PARTIE");
         System.out.println("[2] QUITTER");
         System.out.print("\n> ");
