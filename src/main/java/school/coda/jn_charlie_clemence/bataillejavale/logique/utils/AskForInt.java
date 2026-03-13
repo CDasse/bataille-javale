@@ -11,10 +11,10 @@ public class AskForInt {
             try {
                 System.out.print(message);
                 int result = scanner.nextInt();
-                if (result >= min && result <= max) {
+                if (result >= min + 1 && result <= max + 1) {
                     return result;
                 }
-                System.out.println("Hors limite ! Choisissez entre " + min + " et " + max + ".");
+                System.out.println("Hors limite ! Choisissez entre " + (min + 1) + " et " + (max + 1) + ".");
             } catch (InputMismatchException e) {
                 System.out.println("Erreur : Entrez un nombre entier.");
                 scanner.next();
