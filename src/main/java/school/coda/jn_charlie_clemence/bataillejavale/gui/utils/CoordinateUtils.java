@@ -3,7 +3,7 @@ package school.coda.jn_charlie_clemence.bataillejavale.gui.utils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-public class CoordinateUtils {
+public final class CoordinateUtils {
 
     private CoordinateUtils() {
         throw new UnsupportedOperationException("Cette classe utilitaire ne doit pas être instanciée.");
