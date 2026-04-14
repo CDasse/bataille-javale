@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameController {
+    private static final double COMPUTER_THINKING_DELAY_MS = 100;
+
     private final URL touchWaterSFX = getClass().getResource("/sounds/goutte.wav");
     private final URL diveShipSFX = getClass().getResource("/sounds/bateau_qui_coule.wav");
     private final URL touchShipSFX = getClass().getResource("/sounds/explosion.wav");
@@ -172,7 +174,8 @@ public class GameController {
         }
 
         delayBot.setText("L'adversaire réfléchit...");
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+
+        PauseTransition pause = new PauseTransition(Duration.millis(COMPUTER_THINKING_DELAY_MS));
         pause.setOnFinished(_ -> {
             handleBotShot();
             delayBot.setText("");
