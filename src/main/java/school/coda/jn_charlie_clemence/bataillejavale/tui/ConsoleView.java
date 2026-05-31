@@ -57,7 +57,7 @@ public class ConsoleView {
     public void displayAttackResult(AttackResult result, String playerName) {
         if (result == null) return;
 
-        System.out.print("\n[" + playerName + "] tire en " + (char)('A' + result.y()) + result.x() + " : ");
+        System.out.print("\n[" + playerName + "] tire en " + (char) ('A' + result.y()) + result.x() + " : ");
 
         if (result.hit()) {
             System.out.print("TOUCHÉ ! ");
@@ -71,7 +71,7 @@ public class ConsoleView {
     }
 
     public int[] askForCoordinates(int maxX, int maxY) {
-        int x = askForInt("  > Colonne (1-" + (maxX + 1) + ") : ", 0, maxX)-1;
+        int x = askForInt("  > Colonne (1-" + (maxX + 1) + ") : ", 0, maxX) - 1;
         int y = askForChar("  > Ligne", maxY);
         return new int[]{x, y};
     }
@@ -104,29 +104,29 @@ public class ConsoleView {
         IO.readln();
     }
 
-    public int askGridSize(String dimension){
+    public int askGridSize(String dimension) {
         int size = 0;
         boolean isValid = false;
 
-        while (!isValid){
+        while (!isValid) {
             System.out.print("Renseignez la " + dimension + " de la grille (entre 8 e( 15) : ");
             String input = IO.readln();
 
-            try{
+            try {
                 size = Integer.parseInt(input);
-                if (size >= 8 && size <= 15){
+                if (size >= 8 && size <= 15) {
                     isValid = true;
                 } else {
                     System.out.println("Taille hors spectre, veuillez choisir une valeur entre 8 et 15");
                 }
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println(" Ce n'est pas un nombre, veuillez recommencer!");
             }
         }
         return size;
     }
 
-    public void displayTurnCount (int turn){
+    public void displayTurnCount(int turn) {
         System.out.println("\n----------------------------");
         System.out.println("        TOUR NUMÉRO : " + turn);
         System.out.println("----------------------------");

@@ -2,14 +2,13 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox alignment="CENTER" spacing="30.0"
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER"
+      spacing="30.0"
       xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.GameController">
 
-    <Label fx:id="turnLabel" text="Tour 1" />
-    <Label fx:id="delayBot" />
+    <Label fx:id="turnLabel" text="Tour 1"/>
+    <Label fx:id="delayBot"/>
 
     <HBox alignment="CENTER" spacing="60.0">
         <VBox alignment="CENTER" spacing="10.0">
@@ -39,5 +38,5 @@
         </VBox>
     </HBox>
 
-    <TextArea fx:id="logTextArea" editable="false" text="En attente des premiers tirs..." />
+    <TextArea fx:id="logTextArea" editable="false" text="En attente des premiers tirs..."/>
 </VBox>

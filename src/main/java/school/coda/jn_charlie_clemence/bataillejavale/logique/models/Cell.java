@@ -9,15 +9,16 @@ public class Cell {
         this.ship = null;
     }
 
-    public void setShip(Ship ship){
-        this.ship =ship;
-    }
-    public Ship getShip (){
+    public Ship getShip() {
         return this.ship;
     }
 
-    public boolean receiveShot () {
-        if (this.isTargeted){
+    public void setShip(Ship ship) {
+        this.ship = ship;
+    }
+
+    public boolean receiveShot() {
+        if (this.isTargeted) {
             return false;
         }
 
@@ -30,7 +31,7 @@ public class Cell {
         return false;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.ship == null;
     }
 
@@ -38,7 +39,7 @@ public class Cell {
         return this.isTargeted;
     }
 
-    public boolean isShipAlive(){
+    public boolean isShipAlive() {
         if (this.ship == null) {
             return false;
         }

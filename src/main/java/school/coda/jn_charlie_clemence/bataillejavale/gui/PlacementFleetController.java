@@ -1,10 +1,5 @@
 package school.coda.jn_charlie_clemence.bataillejavale.gui;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.net.URL;
-import javafx.scene.media.AudioClip;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,27 +10,28 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.utils.ShipFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridCols;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridRows;
 import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
-import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 
 public class PlacementFleetController {
 
     private final URL goutteSFX = getClass().getResource("/sounds/goutte.wav");
     private final AudioClip placeShipSound = (goutteSFX != null) ? new AudioClip(goutteSFX.toExternalForm()) : null;
-
-
-    private void playPlacementSound() {
-        if (placeShipSound != null) {
-            placeShipSound.play();
-        }
-    }
-
+    private final List<Ship> playerFleet = ShipFactory.createFleet();
     @FXML
     private GridPane gridPane;
 
@@ -60,11 +56,14 @@ public class PlacementFleetController {
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
     private EnumShip shipToPlace;
-
-    private final List<Ship> playerFleet = ShipFactory.createFleet();
-
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
+
+    private void playPlacementSound() {
+        if (placeShipSound != null) {
+            placeShipSound.play();
+        }
+    }
 
     @FXML
     private void addPorteAvions() {
@@ -121,7 +120,7 @@ public class PlacementFleetController {
      * </p>
      *
      * @param grid The player's logical grid ({@link Grid}), providing the dimensions
-     * (width and height) needed to draw the interactive board.
+     *             (width and height) needed to draw the interactive board.
      */
     private void initializeGrid(Grid grid) {
         this.gridPane.getChildren().clear();

@@ -12,12 +12,6 @@ public class Grid {
     private final int height;
     private final List<String> shipsAlreadyPlaced;
 
-    public List<String> getListShipsPlaced() {
-        List<String> shipList = new ArrayList<>(5);
-        shipList.addAll(shipsAlreadyPlaced);
-        return shipList;
-    }
-
     public Grid(int height, int width) {
         this.cells = new Cell[height][width];
         for (int row = 0; row < height; row++) {
@@ -30,11 +24,17 @@ public class Grid {
         this.shipsAlreadyPlaced = new ArrayList<>(5);
     }
 
+    public List<String> getListShipsPlaced() {
+        List<String> shipList = new ArrayList<>(5);
+        shipList.addAll(shipsAlreadyPlaced);
+        return shipList;
+    }
+
     public boolean placeShip(Ship ship, int x, int y, Orientation orientation) {
         if (canPlaceShip(ship, x, y, orientation)) {
             for (int i = 0; i < ship.getSize(); i++) {
-                int currentX = (orientation == HORIZONTAL) ? x + i: x;
-                int currentY = (orientation == VERTICAL) ? y + i: y;
+                int currentX = (orientation == HORIZONTAL) ? x + i : x;
+                int currentY = (orientation == VERTICAL) ? y + i : y;
                 cells[currentY][currentX].setShip(ship);
             }
             shipsAlreadyPlaced.add(ship.getName());
@@ -71,10 +71,10 @@ public class Grid {
         return cells[y][x].receiveShot();
     }
 
-    public boolean allShipsSunk () {
+    public boolean allShipsSunk() {
         for (Cell[] cell : cells) {
             for (Cell currentCell : cell) {
-                if (currentCell.isShipAlive()){
+                if (currentCell.isShipAlive()) {
                     return false;
                 }
             }
@@ -82,11 +82,11 @@ public class Grid {
         return true;
     }
 
-    public boolean isCellAlreadyTargeted (int x, int y) {
+    public boolean isCellAlreadyTargeted(int x, int y) {
         return cells[y][x].isTargeted();
     }
 
-    public boolean isCellEmpty (int x, int y) {
+    public boolean isCellEmpty(int x, int y) {
         return cells[y][x].isEmpty();
     }
 
@@ -98,8 +98,8 @@ public class Grid {
         return this.height;
     }
 
-    public Ship getShipAt (int x, int y) {
-        if (x >= 0 && x < width && y >= 0 && y < height){
+    public Ship getShipAt(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
             return cells[y][x].getShip();
         }
         return null;

@@ -13,7 +13,7 @@ public class BotPlayer extends Player {
     @Override
     public int[] getNextMove(Grid playerGrid) {
         // verifying the stack, if the cell is already targeted pop the last element inserted, if no return the pop element as the coordinates to target
-        while (!nextTargets.empty()){
+        while (!nextTargets.empty()) {
             int[] potentialTarget = nextTargets.peek();
             if (playerGrid.isCellAlreadyTargeted(potentialTarget[0], potentialTarget[1])) {
                 nextTargets.pop();
@@ -36,12 +36,12 @@ public class BotPlayer extends Player {
         } while (playerGrid.isCellAlreadyTargeted(targetedX, targetedY));
 
 
-
         return new int[]{targetedX, targetedY};
     }
+
     // method for improving the cpu behavior, when he hit a cell with a ship in it, he will target the possible adjacent cell
-    public void recordResult (AttackResult result, Grid playerGrid){
-        if (!result.hit()){
+    public void recordResult(AttackResult result, Grid playerGrid) {
+        if (!result.hit()) {
             return;
         }
 
@@ -52,11 +52,11 @@ public class BotPlayer extends Player {
                 {result.x() - 1, result.y()},
         };
 
-        for (int[] voisin : cardinalites){
+        for (int[] voisin : cardinalites) {
             int vX = voisin[0];
             int vY = voisin[1];
 
-            if (vX >= 0 && vX < playerGrid.getWidth() && vY >= 0 && vY < playerGrid.getHeight() && !playerGrid.isCellAlreadyTargeted(vX, vY)){
+            if (vX >= 0 && vX < playerGrid.getWidth() && vY >= 0 && vY < playerGrid.getHeight() && !playerGrid.isCellAlreadyTargeted(vX, vY)) {
                 nextTargets.push(voisin);
             }
         }
@@ -64,13 +64,13 @@ public class BotPlayer extends Player {
 
     }
 
-    public void placeCpuShip () {
+    public void placeCpuShip() {
         Random rand = new Random();
         int randX;
         int randY;
         Orientation randomOrientation;
 
-        for (Ship ship: getShips()) {
+        for (Ship ship : getShips()) {
             do {
                 randX = rand.nextInt(getGrid().getWidth());
                 randY = rand.nextInt(getGrid().getHeight());
@@ -81,7 +81,7 @@ public class BotPlayer extends Player {
     }
 
     // clearing the cpu memory for new game
-    public void resetStrategy (){
+    public void resetStrategy() {
         this.nextTargets.clear();
     }
 
