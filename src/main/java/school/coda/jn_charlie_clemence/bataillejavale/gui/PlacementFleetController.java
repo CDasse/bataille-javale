@@ -102,7 +102,7 @@ public class PlacementFleetController {
         int width = (int) widthSlider.getValue();
         int height = (int) heightSlider.getValue();
 
-        humanPlayer = new HumanPlayer("Capitain Nemo", width, height);
+        humanPlayer = new HumanPlayer("Capitaine Nemo", width, height);
 
         botPlayer = new BotPlayer("AI", width, height);
 

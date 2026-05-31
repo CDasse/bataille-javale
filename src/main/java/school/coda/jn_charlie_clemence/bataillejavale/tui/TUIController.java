@@ -32,7 +32,7 @@ public class TUIController {
                     view.displayMessage("Au revoir!");
                     break;
                 default:
-                    view.displayMessage("Choix invalide, réeassayer!");
+                    view.displayMessage("Choix invalide, réessayer!");
                     break;
             }
         }

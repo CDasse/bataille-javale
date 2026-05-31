@@ -109,7 +109,7 @@ public class ConsoleView {
         boolean isValid = false;
 
         while (!isValid){
-            System.out.print("Renseignez la " + dimension + " de la grille (entre 8 er 15) : ");
+            System.out.print("Renseignez la " + dimension + " de la grille (entre 8 e( 15) : ");
             String input = IO.readln();
 
             try{
@@ -120,7 +120,7 @@ public class ConsoleView {
                     System.out.println("Taille hors spectre, veuillez choisir une valeur entre 8 et 15");
                 }
             } catch (NumberFormatException e){
-                System.out.println(" Ce n'est pas un nombre, veuillez recommancer!");
+                System.out.println(" Ce n'est pas un nombre, veuillez recommencer!");
             }
         }
         return size;
