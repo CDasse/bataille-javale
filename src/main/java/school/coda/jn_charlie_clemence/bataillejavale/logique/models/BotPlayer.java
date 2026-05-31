@@ -5,6 +5,9 @@ import java.util.Stack;
 
 public class BotPlayer extends Player {
     private final Stack<int[]> nextTargets = new Stack<>();
+    // Réutilser la même instance de Random : impossible de produire des doublons
+    // Seed par défaut = heure système
+    private final Random rand = new Random();
 
     public BotPlayer(String name, int widthGrid, int heightGrid) {
         super(name, widthGrid, heightGrid);
@@ -21,8 +24,6 @@ public class BotPlayer extends Player {
                 return nextTargets.pop();
             }
         }
-
-        Random rand = new Random();
 
         int maxX = this.getGrid().getWidth();
         int maxY = this.getGrid().getHeight();
@@ -65,7 +66,6 @@ public class BotPlayer extends Player {
     }
 
     public void placeCpuShip() {
-        Random rand = new Random();
         int randX;
         int randY;
         Orientation randomOrientation;
