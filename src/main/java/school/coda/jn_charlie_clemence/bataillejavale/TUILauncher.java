@@ -8,7 +8,7 @@ import school.coda.jn_charlie_clemence.bataillejavale.tui.ConsoleView;
 import school.coda.jn_charlie_clemence.bataillejavale.tui.TUIController;
 
 public class TUILauncher {
-    static void main(String[] args) {
+    static void main() {
         ConsoleView view = new ConsoleView();
         Player human = new HumanPlayer("JOUEUR", 10, 10);
         BotPlayer cpu = new BotPlayer("ORDINATEUR", 10, 10);

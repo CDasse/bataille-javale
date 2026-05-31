@@ -15,7 +15,7 @@ public class AskForInt {
                     return result;
                 }
                 System.out.println("Hors limite ! Choisissez entre " + (min + 1) + " et " + (max + 1) + ".");
-            } catch (InputMismatchException e) {
+            } catch (InputMismatchException _) {
                 System.out.println("Erreur : Entrez un nombre entier.");
                 scanner.next();
             }
