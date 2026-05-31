@@ -24,6 +24,10 @@ public class Grid {
         this.shipsAlreadyPlaced = new ArrayList<>(5);
     }
 
+    private static boolean isInvalid(int xOrY) {
+        return xOrY < 0;
+    }
+
     public List<String> getListShipsPlaced() {
         List<String> shipList = new ArrayList<>(5);
         shipList.addAll(shipsAlreadyPlaced);
@@ -43,29 +47,45 @@ public class Grid {
         return false;
     }
 
+    // Trop forte complexité cyclomatique
     public boolean canPlaceShip(Ship ship, int x, int y, Orientation orientation) {
-        if (shipsAlreadyPlaced.contains(ship.getName())) {
-            return false;
-        }
+        if (isShipAlreadyPlaced(ship)) return false;
+        if (isShipTooBigToBePlaced(ship, x, y, orientation)) return false;
 
-        if (orientation == HORIZONTAL) {
-            if (x < 0 || x + ship.getSize() > this.width) return false;
-        } else {
-            if (y < 0 || y + ship.getSize() > this.height) return false;
-        }
         for (int i = 0; i < ship.getSize(); i++) {
             int currentX = (orientation == HORIZONTAL) ? x + i : x;
             int currentY = (orientation == VERTICAL) ? y + i : y;
 
-            if (currentX < 0 || currentX >= cells[0].length || currentY < 0 || currentY >= cells.length || !(cells[currentY][currentX].isEmpty())) {
+            // De manière générale votre code serait plus lisible si vous aviez créer des types "wrapper"
+            // Exemple : plutôt que de parler de cells[0] -> on parlerait de row
+            if (isNotEmpty(currentX, currentY)) {
                 return false;
             }
         }
         return true;
     }
 
+    private boolean isShipTooBigToBePlaced(Ship ship, int x, int y, Orientation orientation) {
+        if (orientation == HORIZONTAL) {
+            return x < 0 || x + ship.getSize() > this.width;
+        }
+        return y < 0 || y + ship.getSize() > this.height;
+    }
+
+    private boolean isNotEmpty(int currentX, int currentY) {
+        return isInvalid(currentX)
+                || currentX >= cells[0].length
+                || isInvalid(currentY)
+                || currentY >= cells.length
+                || !(cells[currentY][currentX].isEmpty());
+    }
+
+    private boolean isShipAlreadyPlaced(Ship ship) {
+        return shipsAlreadyPlaced.contains(ship.getName());
+    }
+
     public boolean shoot(int x, int y) {
-        if (x < 0 || x >= cells[0].length || y < 0 || y >= cells.length) {
+        if (isInvalid(x) || x >= cells[0].length || isInvalid(y) || y >= cells.length) {
             return false;
         }
         return cells[y][x].receiveShot();
