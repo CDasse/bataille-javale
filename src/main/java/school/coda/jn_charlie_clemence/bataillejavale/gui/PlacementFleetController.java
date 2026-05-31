@@ -163,12 +163,14 @@ public class PlacementFleetController {
         });
     }
 
-    private void setOnMouseExited(Rectangle cell, int r, int c) {
+    // Éviter le nommage ambigu
+    // Ne coûte pas très cher de les renommaer
+    private void setOnMouseExited(Rectangle cell, int row, int column) {
         cell.setOnMouseExited(_ -> {
             if (shipToPlace != null) {
                 Ship ship = getShipToPlace(playerFleet);
                 if (ship != null) {
-                    hideVisualisationOnMouseExit(r, c, ship.getSize());
+                    hideVisualisationOnMouseExit(row, column, ship.getSize());
                 }
             }
         });
