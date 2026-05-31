@@ -90,8 +90,8 @@ public class PlacementFleetController {
         add(PATROUILLEUR);
     }
 
-    private void add(ShipType porteavions) {
-        this.shipToPlace = porteavions;
+    private void add(ShipType ship) {
+        this.shipToPlace = ship;
         welcomeText.setText("Placement : " + shipToPlace.name);
     }
 
