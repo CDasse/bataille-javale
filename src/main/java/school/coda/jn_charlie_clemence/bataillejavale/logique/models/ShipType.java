@@ -1,6 +1,6 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.models;
 
-public enum EnumShip {
+public enum ShipType {
     PORTEAVIONS("Porte-avions"),
     CUIRASSE("Cuirassé"),
     DESTROYER("Destroyer"),
@@ -9,7 +9,7 @@ public enum EnumShip {
 
     public final String name;
 
-    EnumShip(String name) {
+    ShipType(String name) {
         this.name = name;
     }
 }

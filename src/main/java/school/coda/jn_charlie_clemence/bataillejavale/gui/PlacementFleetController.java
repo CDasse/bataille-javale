@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridCols;
 import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridRows;
-import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.EnumShip.*;
+import static school.coda.jn_charlie_clemence.bataillejavale.logique.models.ShipType.*;
 
 
 public class PlacementFleetController {
@@ -55,7 +55,7 @@ public class PlacementFleetController {
 
     private Orientation currentOrientation = Orientation.HORIZONTAL;
 
-    private EnumShip shipToPlace;
+    private ShipType shipToPlace;
     private HumanPlayer humanPlayer;
     private BotPlayer botPlayer;
 
@@ -90,7 +90,7 @@ public class PlacementFleetController {
         add(PATROUILLEUR);
     }
 
-    private void add(EnumShip porteavions) {
+    private void add(ShipType porteavions) {
         this.shipToPlace = porteavions;
         welcomeText.setText("Placement : " + shipToPlace.name);
     }
