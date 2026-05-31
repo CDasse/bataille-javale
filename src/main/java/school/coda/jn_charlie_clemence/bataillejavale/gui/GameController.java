@@ -92,12 +92,16 @@ public class GameController {
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
 
+        // FIX : démarre qu'une seule fois cette magnifique musique
+        playOfficialMusiqueSound();
+
         initFleetStatus(humanPlayer, playerFleetStatusBox, humanShipLabels);
         initFleetStatus(botPlayer, botFleetStatusBox, botShipLabels);
     }
 
     private void drawGrid(GridPane playerGridPane, Grid grid, boolean isRadarGrid, Rectangle[][] cellArray) {
-        playOfficialMusiqueSound();
+        // Attention la musique est démarrée 2 fois cf lignes 92 et 93
+        // playOfficialMusiqueSound();
         int rows = grid.getHeight();
         int cols = grid.getWidth();
 
