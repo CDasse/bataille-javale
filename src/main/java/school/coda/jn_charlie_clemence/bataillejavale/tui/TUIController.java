@@ -4,8 +4,8 @@ import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
 
 public class TUIController {
-    private Game game;
     private final ConsoleView view;
+    private Game game;
     private Player human;
     private BotPlayer cpu;
 
@@ -16,14 +16,14 @@ public class TUIController {
         this.cpu = cpu;
     }
 
-    public void launchApp(){
+    public void launchApp() {
         boolean keepRunning = true;
 
-        while (keepRunning){
+        while (keepRunning) {
             view.displayMainMenu();
             String choice = IO.readln();
 
-            switch (choice){
+            switch (choice) {
                 case "1":
                     play();
                     break;
@@ -32,13 +32,13 @@ public class TUIController {
                     view.displayMessage("Au revoir!");
                     break;
                 default:
-                    view.displayMessage("Choix invalide, réeassayer!");
+                    view.displayMessage("Choix invalide, réessayer!");
                     break;
             }
         }
     }
 
-    public void play(){
+    public void play() {
         cpu.resetStrategy();
 
         int newWidth = view.askGridSize("largeur");
@@ -50,12 +50,12 @@ public class TUIController {
 
         setupStage();
 
-        while (!game.isGameOver()){
+        while (!game.isGameOver()) {
             playTurn();
         }
 
         String winner;
-        if (cpu.getGrid().allShipsSunk()){
+        if (cpu.getGrid().allShipsSunk()) {
             winner = human.getName();
         } else {
             winner = cpu.getName();
@@ -64,19 +64,19 @@ public class TUIController {
         view.displayEndMenu(winner);
     }
 
-    public void setupStage(){
+    public void setupStage() {
         view.displayMessage("=== PHASE DE PLACEMENT ===");
 
-        for (Ship ship : human.getShips()){
+        for (Ship ship : human.getShips()) {
             boolean placed = false;
-            while (!placed){
+            while (!placed) {
                 view.displayGrid(human.getGrid(), "--- MA FLOTTE ---", false);
                 view.displayPlacementHeader(ship.getName(), ship.getSize());
-                int[] coords = view.askForCoordinates(human.getGrid().getWidth()-1, human.getGrid().getHeight());
+                int[] coords = view.askForCoordinates(human.getGrid().getWidth() - 1, human.getGrid().getHeight());
                 Orientation orientation = view.askForShipOrientation();
                 placed = human.getGrid().placeShip(ship, coords[0], coords[1], orientation);
 
-                if (!placed){
+                if (!placed) {
                     view.displayErrorMessage("Position impossible(hors-grille ou collision). Veuillez réessayer!");
                 }
             }
@@ -86,7 +86,7 @@ public class TUIController {
         cpu.placeCpuShip();
     }
 
-    public void playTurn(){
+    public void playTurn() {
         view.displayTurnCount(game.getCurrentTurn());
 
         AttackResult humanResult = null;
@@ -96,11 +96,11 @@ public class TUIController {
 
         view.displayMessage("=== PHASE DE TIR ===");
 
-        while (humanResult == null){
-            int[] coords = view.askForCoordinates(cpu.getGrid().getWidth()-1, cpu.getGrid().getHeight());
+        while (humanResult == null) {
+            int[] coords = view.askForCoordinates(cpu.getGrid().getWidth() - 1, cpu.getGrid().getHeight());
             humanResult = game.nextHumanTurn(coords[0], coords[1]);
 
-            if (humanResult == null){
+            if (humanResult == null) {
                 view.displayErrorMessage("Case déjà visée! Choissisez une autre cible");
                 view.displayGrid(cpu.getGrid(), "--- RADAR ---", true);
             }
@@ -109,7 +109,10 @@ public class TUIController {
 
         if (!game.isGameOver()) {
             view.displayMessage("\nTour de l'adversaire...");
-            try { Thread.sleep(250); } catch (InterruptedException _) {}
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException _) {
+            }
             AttackResult cpuResult = game.nextCpuTurn();
             cpu.recordResult(cpuResult, human.getGrid());
             view.displayAttackResult(cpuResult, cpu.getName());

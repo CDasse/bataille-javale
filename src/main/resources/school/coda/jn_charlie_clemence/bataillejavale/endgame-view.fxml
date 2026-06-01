@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER"
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
       xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
       fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.EndGameController"
       prefHeight="400.0" prefWidth="600.0">
 
-    <Label fx:id="gameResult" alignment="CENTER" />
+    <Label fx:id="gameResult" alignment="CENTER"/>
 
-    <Label fx:id="nbOfTurn" alignment="CENTER" />
+    <Label fx:id="nbOfTurn" alignment="CENTER"/>
 
-    <Button onAction="#goBackToHomePage" text="Retourner à l'accueil" />
+    <Button onAction="#goBackToHomePage" text="Retourner à l'accueil"/>
 </VBox>

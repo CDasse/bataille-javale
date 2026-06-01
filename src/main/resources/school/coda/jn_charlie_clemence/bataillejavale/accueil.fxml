@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-
-<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.AccueilController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12"
+           fx:controller="school.coda.jn_charlie_clemence.bataillejavale.gui.AccueilController">
 
     <VBox alignment="CENTER" spacing="20.0">
-        <Button onAction="#playButton" text="NOUVELLE PARTIE !" />
+        <Button onAction="#playButton" text="NOUVELLE PARTIE !"/>
     </VBox>
 
     <Label text="Un jeu de Charlie, Clémence et J-N" StackPane.alignment="BOTTOM_RIGHT">
         <StackPane.margin>
-            <Insets bottom="20.0" right="20.0" />
+            <Insets bottom="20.0" right="20.0"/>
         </StackPane.margin>
     </Label>
 

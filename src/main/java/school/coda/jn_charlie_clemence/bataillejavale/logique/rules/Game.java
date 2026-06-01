@@ -1,6 +1,9 @@
 package school.coda.jn_charlie_clemence.bataillejavale.logique.rules;
 
-import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.AttackResult;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.BotPlayer;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Player;
+import school.coda.jn_charlie_clemence.bataillejavale.logique.models.Ship;
 
 public class Game {
     private final Player player;
@@ -35,7 +38,7 @@ public class Game {
 
         AttackResult result = new AttackResult(x, y, hit, sunk, shipHit, this.isGameEnded);
 
-        if (!this.isGameEnded){
+        if (!this.isGameEnded) {
             this.currentPlayer = opponent;
         }
 
@@ -45,7 +48,7 @@ public class Game {
     public AttackResult nextHumanTurn(int x, int y) {
         if (this.currentPlayer instanceof BotPlayer) return null;
         if (cpu.getGrid().isCellAlreadyTargeted(x, y)) return null;
-        return  executeShot(x, y);
+        return executeShot(x, y);
 
     }
 

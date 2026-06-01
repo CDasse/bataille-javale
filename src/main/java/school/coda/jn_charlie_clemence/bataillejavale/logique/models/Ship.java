@@ -11,7 +11,7 @@ public class Ship {
         this.hp = this.size;
     }
 
-    public int getSize(){
+    public int getSize() {
         return this.size;
     }
 
@@ -19,13 +19,15 @@ public class Ship {
         return this.name;
     }
 
-    public void takeHit(){
+    public void takeHit() {
         if (this.hp > 0) {
             this.hp -= 1;
         }
     }
 
-    public boolean isSunk (){
+    // attention à ce genre d'indentations
+    // se règle facilement via "Reformat Code" dans `IntelliJ`
+    public boolean isSunk() {
         return this.hp == 0;
     }
 }

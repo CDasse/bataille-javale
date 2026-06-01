@@ -21,11 +21,11 @@ public abstract class Player {
         return this.grid;
     }
 
-    public List<Ship> getShips () {
+    public List<Ship> getShips() {
         return this.ships;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 }

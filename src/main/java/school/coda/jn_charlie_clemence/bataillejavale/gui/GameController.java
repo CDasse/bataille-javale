@@ -14,16 +14,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import school.coda.jn_charlie_clemence.bataillejavale.gui.utils.Winner;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.models.*;
 import school.coda.jn_charlie_clemence.bataillejavale.logique.rules.Game;
-import school.coda.jn_charlie_clemence.bataillejavale.gui.utils.Winner;
-
-import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridCols;
+import static school.coda.jn_charlie_clemence.bataillejavale.gui.utils.CoordinateUtils.showNameOfGridRows;
 
 public class GameController {
     private final URL touchWaterSFX = getClass().getResource("/sounds/goutte.wav");
@@ -39,34 +40,24 @@ public class GameController {
     private final AudioClip winSound = (winSFX != null) ? new AudioClip(winSFX.toExternalForm()) : null;
     private final AudioClip loseSound = (loseSFX != null) ? new AudioClip(loseSFX.toExternalForm()) : null;
     private final AudioClip officialMusicSound = (officialMusicSFX != null) ? new AudioClip(officialMusicSFX.toExternalForm()) : null;
-
-    @FXML
-    private GridPane playerGridPane;
-
-    @FXML
-    private GridPane botGridPane;
-
-    @FXML
-    private VBox playerFleetStatusBox;
-
-    @FXML
-    private VBox botFleetStatusBox;
-
-    @FXML
-    private Label turnLabel;
-
-    @FXML
-    private Label delayBot;
-
-    @FXML
-    private TextArea logTextArea;
-
-    private HumanPlayer humanPlayer;
-    private BotPlayer botPlayer;
-
     private final Map<Ship, Label> humanShipLabels = new HashMap<>();
     private final Map<Ship, Label> botShipLabels = new HashMap<>();
-
+    @FXML
+    private GridPane playerGridPane;
+    @FXML
+    private GridPane botGridPane;
+    @FXML
+    private VBox playerFleetStatusBox;
+    @FXML
+    private VBox botFleetStatusBox;
+    @FXML
+    private Label turnLabel;
+    @FXML
+    private Label delayBot;
+    @FXML
+    private TextArea logTextArea;
+    private HumanPlayer humanPlayer;
+    private BotPlayer botPlayer;
     private Rectangle[][] humanCells;
     private Rectangle[][] botCells;
 
@@ -92,12 +83,16 @@ public class GameController {
         drawGrid(playerGridPane, humanPlayer.getGrid(), false, humanCells);
         drawGrid(botGridPane, botPlayer.getGrid(), true, botCells);
 
+        // FIX : démarre qu'une seule fois cette magnifique musique
+        playOfficialMusiqueSound();
+
         initFleetStatus(humanPlayer, playerFleetStatusBox, humanShipLabels);
         initFleetStatus(botPlayer, botFleetStatusBox, botShipLabels);
     }
 
     private void drawGrid(GridPane playerGridPane, Grid grid, boolean isRadarGrid, Rectangle[][] cellArray) {
-        playOfficialMusiqueSound();
+        // Attention la musique est démarrée 2 fois cf lignes 92 et 93
+        // playOfficialMusiqueSound();
         int rows = grid.getHeight();
         int cols = grid.getWidth();
 
@@ -165,7 +160,7 @@ public class GameController {
             try {
                 endGameView(game.getCurrentTurn(), Winner.HUMAN);
             } catch (IOException e) {
-                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e );
+                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e);
                 playLoseSound();
             }
             return;
@@ -174,8 +169,8 @@ public class GameController {
         delayBot.setText("L'adversaire réfléchit...");
         PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
         pause.setOnFinished(_ -> {
-            handleBotShot();
-            delayBot.setText("");
+                    handleBotShot();
+                    delayBot.setText("");
                 }
         );
         pause.play();
@@ -212,7 +207,7 @@ public class GameController {
             try {
                 endGameView(game.getCurrentTurn(), Winner.BOT);
             } catch (IOException e) {
-                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e );
+                IO.println("Une erreur est survenue lors du chargement de la page de endGame" + e);
             }
             return;
         }
@@ -292,7 +287,7 @@ public class GameController {
         }
     }
 
-    private void endGameView(int currentTurn, Winner winner) throws IOException{
+    private void endGameView(int currentTurn, Winner winner) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BatailleJavaleApplication.class.getResource("/school/coda/jn_charlie_clemence/bataillejavale/endgame-view.fxml"));
         Parent root = fxmlLoader.load();
 
