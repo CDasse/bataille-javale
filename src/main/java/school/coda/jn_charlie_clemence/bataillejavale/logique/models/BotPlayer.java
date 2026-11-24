@@ -5,9 +5,15 @@ import java.util.Stack;
 
 public class BotPlayer extends Player {
     private final Stack<int[]> nextTargets = new Stack<>();
+    private final Random random;
 
     public BotPlayer(String name, int widthGrid, int heightGrid) {
+        this(name, widthGrid, heightGrid, new Random());
+    }
+
+    public BotPlayer(String name, int widthGrid, int heightGrid, Random random) {
         super(name, widthGrid, heightGrid);
+        this.random = random != null ? random : new Random();
     }
 
     @Override
@@ -22,7 +28,7 @@ public class BotPlayer extends Player {
             }
         }
 
-        Random rand = new Random();
+        Random rand = this.random;
 
         int maxX = this.getGrid().getWidth();
         int maxY = this.getGrid().getHeight();
@@ -65,7 +71,7 @@ public class BotPlayer extends Player {
     }
 
     public void placeCpuShip () {
-        Random rand = new Random();
+        Random rand = this.random;
         int randX;
         int randY;
         Orientation randomOrientation;
