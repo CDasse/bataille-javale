@@ -18,8 +18,19 @@ public class BotPlayer extends Player {
 
     @Override
     public int[] getNextMove(Grid playerGrid) {
-        // verifying the stack, if the cell is already targeted pop the last element inserted, if no return the pop element as the coordinates to target
-        while (!nextTargets.empty()){
+        int[] targetFromStack = pollTargetFromStack(playerGrid);
+        if (targetFromStack != null) {
+            return targetFromStack;
+        }
+        return generateRandomTarget(playerGrid);
+    }
+
+    /**
+     * Dépile et retourne la prochaine cible valide dans la pile de chasse.
+     * Ignore les cellules déjà visées sur la grille adverse.
+     */
+    private int[] pollTargetFromStack(Grid playerGrid) {
+        while (!nextTargets.empty()) {
             int[] potentialTarget = nextTargets.peek();
             if (playerGrid.isCellAlreadyTargeted(potentialTarget[0], potentialTarget[1])) {
                 nextTargets.pop();
@@ -27,68 +38,77 @@ public class BotPlayer extends Player {
                 return nextTargets.pop();
             }
         }
+        return null;
+    }
 
-        Random rand = this.random;
-
+    /**
+     * Génère un tir aléatoire sur une case non encore ciblée.
+     */
+    private int[] generateRandomTarget(Grid playerGrid) {
         int maxX = this.getGrid().getWidth();
         int maxY = this.getGrid().getHeight();
 
         int targetedX;
         int targetedY;
-
         do {
-            targetedX = rand.nextInt(maxX);
-            targetedY = rand.nextInt(maxY);
+            targetedX = this.random.nextInt(maxX);
+            targetedY = this.random.nextInt(maxY);
         } while (playerGrid.isCellAlreadyTargeted(targetedX, targetedY));
-
-
 
         return new int[]{targetedX, targetedY};
     }
-    // method for improving the cpu behavior, when he hit a cell with a ship in it, he will target the possible adjacent cell
-    public void recordResult (AttackResult result, Grid playerGrid){
-        if (!result.hit()){
+
+    /**
+     * En cas de tir réussi, empile les cases voisines valides pour le prochain tour.
+     */
+    public void recordResult(AttackResult result, Grid playerGrid) {
+        if (!result.hit()) {
             return;
         }
 
-        int[][] cardinalites = {
-                {result.x(), result.y() - 1},
-                {result.x() + 1, result.y()},
-                {result.x(), result.y() + 1},
-                {result.x() - 1, result.y()},
+        int[][] cardinalNeighbors = {
+                {result.x(), result.y() - 1}, // Haut
+                {result.x() + 1, result.y()}, // Droite
+                {result.x(), result.y() + 1}, // Bas
+                {result.x() - 1, result.y()}  // Gauche
         };
 
-        for (int[] voisin : cardinalites){
-            int vX = voisin[0];
-            int vY = voisin[1];
-
-            if (vX >= 0 && vX < playerGrid.getWidth() && vY >= 0 && vY < playerGrid.getHeight() && !playerGrid.isCellAlreadyTargeted(vX, vY)){
-                nextTargets.push(voisin);
+        for (int[] neighbor : cardinalNeighbors) {
+            if (isWithinBoundsAndUntargeted(neighbor[0], neighbor[1], playerGrid)) {
+                nextTargets.push(neighbor);
             }
         }
-
-
     }
 
-    public void placeCpuShip () {
-        Random rand = this.random;
-        int randX;
-        int randY;
-        Orientation randomOrientation;
+    private boolean isWithinBoundsAndUntargeted(int x, int y, Grid playerGrid) {
+        return x >= 0 && x < playerGrid.getWidth()
+                && y >= 0 && y < playerGrid.getHeight()
+                && !playerGrid.isCellAlreadyTargeted(x, y);
+    }
 
-        for (Ship ship: getShips()) {
-            do {
-                randX = rand.nextInt(getGrid().getWidth());
-                randY = rand.nextInt(getGrid().getHeight());
-
-                randomOrientation = (rand.nextBoolean()) ? Orientation.HORIZONTAL : Orientation.VERTICAL;
-            } while (!(this.getGrid().placeShip(ship, randX, randY, randomOrientation)));
+    /**
+     * Place aléatoirement tous les navires du bot sur sa grille.
+     */
+    public void placeCpuShip() {
+        for (Ship ship : getShips()) {
+            placeSingleShip(ship);
         }
     }
 
-    // clearing the cpu memory for new game
-    public void resetStrategy (){
-        this.nextTargets.clear();
+    private void placeSingleShip(Ship ship) {
+        boolean placed = false;
+        while (!placed) {
+            int randX = this.random.nextInt(getGrid().getWidth());
+            int randY = this.random.nextInt(getGrid().getHeight());
+            Orientation orientation = this.random.nextBoolean() ? Orientation.HORIZONTAL : Orientation.VERTICAL;
+            placed = this.getGrid().placeShip(ship, randX, randY, orientation);
+        }
     }
 
+    /**
+     * Réinitialise la stratégie et vide la mémoire des cibles empilées.
+     */
+    public void resetStrategy() {
+        this.nextTargets.clear();
+    }
 }
